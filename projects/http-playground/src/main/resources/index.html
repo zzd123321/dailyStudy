@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Day 002 · HTTP 实验</title>
+  <style>
+    body { max-width: 860px; margin: 36px auto; padding: 0 20px; font-family: system-ui, sans-serif; color: #202734; }
+    label { display: block; margin: 16px 0 6px; font-weight: 600; }
+    input, textarea, select { box-sizing: border-box; width: 100%; padding: 10px; font: inherit; border: 1px solid #aeb7c4; border-radius: 6px; }
+    textarea, pre { font-family: ui-monospace, monospace; }
+    button { padding: 10px 14px; margin: 8px 4px 8px 0; cursor: pointer; }
+    pre { padding: 16px; background: #f1f4f8; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .hint { color: #536176; line-height: 1.7; }
+  </style>
+</head>
+<body>
+  <h1>Day 002：观察一次 HTTP 交换</h1>
+  <p class="hint">先打开开发者工具 → Network。下方操作调用同源 API；观察方法、URL、请求头、Payload、状态码与 Response。数据只在内存中，重启会清空。</p>
+  <div>
+    <button type="button" data-preset="list">准备 GET 列表</button>
+    <button type="button" data-preset="create">准备 POST 创建</button>
+    <button type="button" data-preset="missing">准备 404</button>
+    <button type="button" data-preset="failure">准备 500</button>
+  </div>
+  <form id="request-form">
+    <label for="method">请求方法</label>
+    <select id="method"><option>GET</option><option>POST</option><option>DELETE</option></select>
+    <label for="path">接口路径（仅本实验服务）</label>
+    <input id="path" value="/api/notes?limit=2" required>
+    <label for="content-type">POST 的 Content-Type</label>
+    <input id="content-type" value="application/json">
+    <label for="body">POST 正文</label>
+    <textarea id="body" rows="4">{"title":"理解 HTTP 请求"}</textarea>
+    <button id="send" type="submit">发起请求</button>
+  </form>
+  <p id="status" aria-live="polite">尚未发起请求。</p>
+  <h2>浏览器脚本可见的响应头</h2>
+  <pre id="headers">等待响应</pre>
+  <h2>响应正文</h2>
+  <pre id="response">等待响应</pre>
+  <p class="hint">非 2xx 也可能是成功收到的 HTTP 响应。fetch 不会只因为 404/500 就 reject；需要检查 response.ok 和 response.status。Network 中还能看到脚本未显示的细节。</p>
+  <script>
+    const element = id => document.getElementById(id);
+    const presets = {
+      list: ['GET', '/api/notes?limit=2'],
+      create: ['POST', '/api/notes'],
+      missing: ['GET', '/api/notes/999999'],
+      failure: ['GET', '/api/demo/failure']
+    };
+    document.querySelectorAll('[data-preset]').forEach(button => {
+      button.addEventListener('click', () => {
+        const [method, path] = presets[button.dataset.preset];
+        element('method').value = method;
+        element('path').value = path;
+      });
+    });
+    element('request-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      element('send').disabled = true;
+      element('headers').textContent = '等待响应';
+      element('response').textContent = '等待响应';
+      const started = performance.now();
+      try {
+        const url = new URL(element('path').value, location.origin);
+        if (url.origin !== location.origin || !url.pathname.startsWith('/api/')) {
+          throw new Error('这里只请求本实验服务的 /api/ 路径');
+        }
+        const method = element('method').value;
+        const options = { method, headers: { Accept: 'application/json' } };
+        if (method === 'POST') {
+          options.headers['Content-Type'] = element('content-type').value;
+          options.body = element('body').value;
+        }
+        const response = await fetch(url, options);
+        const text = await response.text();
+        element('status').textContent = `HTTP ${response.status} · response.ok=${response.ok} · ${Math.round(performance.now() - started)} ms`;
+        element('headers').textContent = [...response.headers].map(([key, value]) => `${key}: ${value}`).join('\n');
+        try { element('response').textContent = JSON.stringify(JSON.parse(text), null, 2); }
+        catch { element('response').textContent = text; }
+      } catch (error) {
+        element('status').textContent = `未完成请求：${error.message}`;
+      } finally {
+        element('send').disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

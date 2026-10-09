@@ -10,22 +10,28 @@
 |---|---|
 | [Day 001 完整课程](lessons/day-001/README.md) | Java 工具链、编译运行、学习时长计算器、Maven、练习与验收 |
 | [Day 001 练习](lessons/day-001/exercises.md) | 先预测、再运行、解释差异 |
+| [Day 002 完整课程](lessons/day-002/README.md) | HTTP、Network、curl、本地实验与错误诊断 |
+| [Day 002 练习与观察模板](lessons/day-002/exercises.md) | 重现请求，记录成功与失败 |
+| [学习进度](docs/progress.md) | 区分课程提供与用户实际完成 |
 | [每日安排](docs/daily-schedule.md) | 192 次学习的计划；标出已提供完整课程的日期 |
 | [完整路线](docs/roadmap.md) | 阶段目标、验收和资料 |
 | [macOS 环境与学习工作流](docs/cross-platform-workflow.md) | macOS 的安装、Git 同步、编码与常见错误 |
 | [学习记录模板](docs/learning-log-template.md) | 记录实际学习结果，便于下一次接着学 |
 | [课程验证记录](docs/day-001-validation.md) | 云环境实际运行结果与本地验证边界 |
+| [Day 002 验证记录](docs/day-002-validation.md) | 接口测试、curl、服务停止与重启结果 |
 
 Day 表示一次学习，不是连续的自然日。按照每周四次的节奏，Day 001–004 对应第 1 周，Day 005–008 对应第 2 周。
 
-**目前已提供完整教学内容的是 Day 001。** 后续 191 次有计划，尚未标记为完成的课程；它们会围绕当天产出依次展开。仓库提供代码和验证结果，不代表学习者已经掌握。
+**目前已提供完整教学内容的是 Day 001–002。** 用户已确认完成 Day 001，当前学习 Day 002。其余 190 次已有计划，课程会围绕当天产出依次展开。仓库提供代码和验证结果，不代表学习者已经掌握。
 
 ## 项目组织
 
 ```text
 docs/                         路线、每日安排、同步说明
-lessons/day-001/               当天讲解、示例、练习、参考答案
+lessons/day-001/               Java 工具链课程、示例、练习、参考答案
+lessons/day-002/               HTTP 课程、练习、观察模板、参考答案
 projects/java-foundations/    从 Java 小程序开始积累的项目代码
+projects/http-playground/    Day 002 的本地 HTTP 实验服务和页面
 notes/                        你自己的学习记录
 scripts/setup-cloud-java.sh  Linux x64 云环境工具安装脚本
 ```
@@ -68,6 +74,20 @@ java -cp target/classes com.dailystudy.day001.LearningBudget
 ```
 
 云环境脚本只支持 Linux x86_64，使用官方 JDK/Maven 下载地址并验证 SHA-256/SHA-512。工具和 Maven 缓存存放在 `/workspace/.dailystudy-tools`，不进入项目仓库。它在本机生成 Maven 代理设置，复用平台提供的系统 Java 信任库，不关闭 TLS 验证。macOS 本地安装按上面的说明操作。
+
+## Day 002：HTTP 实验
+
+在 Mac 的仓库根目录执行：
+
+```bash
+cd projects/http-playground
+mvn -B -ntp test dependency:copy-dependencies
+java -cp 'target/classes:target/dependency/*' com.dailystudy.day002.HttpPlayground
+```
+
+保持服务终端运行，用第二个终端执行课程中的 curl。Mac 本地浏览器地址栏输入 `http://127.0.0.1:8082` 观察 Network；这是本地教学地址，云环境回环地址不等于 Mac 的地址。
+
+数据仅在内存中，重启会清空；按 Ctrl+C 停止。没有登录或数据库，供本地 HTTP 实验使用。详细步骤见 [Day 002](lessons/day-002/README.md)。云环境运行前先激活 `/workspace/.dailystudy-tools/env.sh`。
 
 ## 怎么判断今天学会了
 
