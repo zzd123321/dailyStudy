@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Cloud onboarding helper for the Linux x86_64 environment, not a Windows/macOS installer.
+# Cloud onboarding helper for Linux x86_64; local macOS setup is documented separately.
 set -euo pipefail
 
 if [[ "$(uname -s)" != Linux || "$(uname -m)" != x86_64 ]]; then

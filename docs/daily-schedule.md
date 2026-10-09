@@ -4,7 +4,7 @@
 
 Day 001 已提供完整教学、代码、练习与验收。后续课程按既定主线逐次展开；当前表中的其他条目是计划。
 
-Windows/macOS 的操作差异见 [跨电脑工作流](cross-platform-workflow.md)。阶段验收与资料见 [完整路线](roadmap.md)。
+macOS 的工具安装与 Git 同步见 [macOS 学习工作流](cross-platform-workflow.md)。阶段验收与资料见 [完整路线](roadmap.md)。
 
 | 学习日 | 周次 / 主题 | 当次任务 | 课程状态 |
 |---|---|---|---|

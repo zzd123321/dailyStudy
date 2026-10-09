@@ -2,16 +2,10 @@
 
 从仓库根目录复制模板，填写真实结果：
 
-Windows PowerShell：
-
-```powershell
-Copy-Item docs/learning-log-template.md notes/day-001.md
-```
-
-macOS：
+macOS 终端：
 
 ```bash
 cp docs/learning-log-template.md notes/day-001.md
 ```
 
-首次完成后，按 [跨电脑工作流](../docs/cross-platform-workflow.md) 提交并推送。另一台电脑开始前先拉取。
+首次完成后，按 [macOS 学习工作流](../docs/cross-platform-workflow.md) 提交并推送。如果使用多台 Mac，换电脑开始前先拉取。

@@ -1,37 +1,10 @@
-# Windows 与 macOS：工具安装和跨电脑学习
+# macOS：工具安装与学习工作流
 
-两台电脑各自拥有 JDK、Maven、Git 和一份仓库，通过 GitHub 同步源码与学习记录。编译输出在本地重新生成，不从另一台电脑复制。
+在 Mac 上准备 JDK、Maven、Git 和一份仓库，通过 GitHub 保存源码与学习记录。如果使用多台 Mac，各自安装工具并克隆仓库；编译输出在本地重新生成。
 
-## 1. 两台电脑分别准备工具
+## 1. 准备工具
 
-### Windows
-
-使用 PowerShell。Git Bash 也可用，但本课 Windows 说明以 PowerShell 为准。
-
-1. 从 [Temurin 下载页](https://adoptium.net/temurin/releases/?version=21) 选择 Java 21、Windows、JDK 和匹配架构，常见电脑选 x64；使用官方安装包。
-2. 安装器提供时启用 PATH 和 JAVA_HOME 配置。JAVA_HOME 应指向 JDK 根目录，不包含最后的 `bin`。
-3. 从 [Maven 官方下载页](https://maven.apache.org/download.cgi) 下载 Maven 3.9.x 的 Binary zip archive，解压到固定目录，例如 `C:\DevTools\apache-maven-3.9.11`。该路径只是示例，要与实际版本和目录一致。
-4. 下载对应 SHA-512 校验文件，用 PowerShell 的 `Get-FileHash -Algorithm SHA512 文件路径` 与官方值对照。若不一致，不使用该压缩包。
-5. 在用户 PATH 中增加 Maven 的 `bin` 目录；JDK 的 bin 可以写成 `%JAVA_HOME%\bin`。
-6. 从 [Git 官方入口](https://git-scm.com/downloads) 安装 Git，并使用正常的 GitHub 身份验证方式。
-7. 重新打开 PowerShell，检查：
-
-```powershell
-java -version
-javac -version
-mvn -version
-git --version
-where.exe java
-where.exe javac
-```
-
-前两项主版本应该是 21；Maven 输出的 Java 版本也应是 21。`where.exe` 用于发现 PATH 中命令所在位置。多个 JDK 共存时注意 PATH 顺序。
-
-VS Code 可安装 [Extension Pack for Java](https://code.visualstudio.com/docs/java/java-tutorial)。用 Java 扩展的运行环境设置确认项目 JDK，但命令行验证仍然需要通过。
-
-### macOS
-
-从同一个 Temurin 下载页选择 Java 21、macOS、JDK。Apple Silicon 通常选 aarch64/arm64，Intel Mac 选 x64。`uname -m` 可查看机器架构。
+从 [Temurin 下载页](https://adoptium.net/temurin/releases/?version=21) 选择 Java 21、macOS、JDK。Apple Silicon 通常选 aarch64/arm64，Intel Mac 选 x64。`uname -m` 可查看机器架构。
 
 安装官方 PKG 后，在终端检查：
 
@@ -62,13 +35,17 @@ command -v java
 command -v javac
 ```
 
-如果 Homebrew 或其他工具安装了额外 JDK，确认当前 JAVA_HOME 和 Maven 仍使用 Java 21。只需两台电脑主版本一致，不要求目录名或补丁版本完全相同。
+如果 `git --version` 提示需要安装开发者工具，可运行 `xcode-select --install` 并完成系统安装提示，然后重新打开终端。也可使用已有的 Homebrew 安装 Git：`brew install git`，选择一种方式即可。
 
-以上是本地操作说明，当前课程代码在 Linux 云环境实测；没有声称已在你的两台电脑执行安装。
+如果 Homebrew 或其他工具安装了额外 JDK，确认当前 JAVA_HOME 和 Maven 仍使用 Java 21。多台 Mac 只需主版本一致，不要求目录名或补丁版本完全相同。
 
-## 2. 两台电脑各自克隆一次
+VS Code 可安装 [Extension Pack for Java](https://code.visualstudio.com/docs/java/java-tutorial)。用 Java 扩展的运行环境设置确认项目 JDK，命令行检查也需要通过。
 
-在任意适合放项目的目录：
+以上是 macOS 本地操作说明，当前课程代码在 Linux 云环境实测；没有在你的 Mac 上执行安装。
+
+## 2. 首次克隆仓库
+
+在适合放项目的目录执行；如果使用多台 Mac，每台首次克隆一次：
 
 ```shell
 git clone https://github.com/zzd123321/dailyStudy.git
@@ -103,7 +80,7 @@ git pull --ff-only
 
 有未提交改动时，先查看差异并保存自己的工作。不要通过删除文件或强制 reset 来“解决”状态。
 
-开始学习前检查两台电脑是否都在 main，并已拿到上一台的提交。
+开始学习前检查当前分支为 main，并已拿到远端最新提交。
 
 ## 4. 每次结束学习
 
@@ -120,7 +97,7 @@ git push origin main
 
 后续课程替换为当天实际修改的文件。没有改动就不必制造空提交。源码若只是练习后恢复原样，也不需要强行添加改动。
 
-简单规则：**电脑 A 学习结束后推送，电脑 B 学习开始前拉取。**
+简单规则：**学习结束后推送，下一次开始前拉取。** 多台 Mac 也使用同样的流程。
 
 ## 5. pull 或 push 被拒绝怎么办
 
@@ -139,15 +116,15 @@ Git 身份验证失败与分支落后不同。前者通过本地 Git 客户端�
 
 ## 6. 编码与换行
 
-仓库 `.gitattributes` 统一文本换行，减少两套系统间的无意义差异。编辑器文件编码使用 UTF-8，编译命令明确使用 UTF-8。
+仓库 `.gitattributes` 统一文本换行。编辑器文件编码使用 UTF-8，编译命令明确使用 UTF-8。
 
-Java 21 默认字符集通常为 UTF-8，但终端显示还受终端配置影响。Windows 中文乱码时先确认源码保存为 UTF-8；终端可尝试 `chcp 65001` 后重新运行，并使用支持中文的字体。不要把乱码输出当作业务代码错误直接改字符串。
+Java 21 默认字符集通常为 UTF-8，但终端显示还受终端配置影响。中文乱码时先确认源码和终端编码为 UTF-8，并使用支持中文的字体。不要把乱码输出当作业务代码错误直接改字符串。
 
 文件和类名的大小写始终保持一致。有些本地文件系统对大小写不敏感，Linux 云环境可能会暴露错误。
 
 ## 7. 路径与运行目录
 
-本课 Java/Maven 命令可在 PowerShell 与 macOS 终端执行：
+本课 Java/Maven 命令在 macOS 终端执行：
 
 ```shell
 javac -encoding UTF-8 -d out examples/HelloStudy.java
@@ -158,6 +135,6 @@ java -cp target/classes com.dailystudy.day001.LearningBudget
 
 前两条从 `lessons/day-001` 执行，后两条从 `projects/java-foundations` 执行。不要在同一个目录连续照抄四条。
 
-今天 classpath 只有一个目录，无需分隔符。以后有多个条目时，Windows 使用 `;`，macOS/Linux 使用 `:`。
+今天 classpath 只有一个目录，无需分隔符。以后在 macOS 上有多个条目时，使用 `:` 分隔。
 
-云环境的 `source .../env.sh` 是 Bash 激活命令，不适用于 Windows PowerShell。也不要把云环境 `/workspace/...` 路径原样拿到自己的电脑使用。
+课程中的 `/workspace/...` 路径和工具激活脚本用于 Linux 云环境。macOS 本地使用自己的仓库路径，并按本页设置 JAVA_HOME 与 PATH。

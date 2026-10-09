@@ -38,15 +38,15 @@ javac -version
 
 我们还会使用 Maven。它管理项目构建和依赖，不是 JVM，也不是另一门语言。
 
-## 3. Windows 与 macOS 安装
+## 3. macOS 安装
 
-按 [双平台操作说明](../../docs/cross-platform-workflow.md#1-两台电脑分别准备工具) 操作。
+按 [macOS 操作说明](../../docs/cross-platform-workflow.md#1-准备工具) 操作。
 
-共同要求：
+工具要求：
 
 - 安装 Java 21 **JDK**，选择与你电脑架构匹配的版本。
-- Windows 通常是 x64；Apple Silicon 的 Mac 是 arm64，Intel Mac 是 x64。以自己设备为准。
-- 两台电脑都检查 `java` 和 `javac` 的主版本为 21。
+- Apple Silicon 的 Mac 是 arm64，Intel Mac 是 x64。以自己设备为准。
+- 检查 `java` 和 `javac` 的主版本为 21。
 - 安装 Maven 3.9.x 和 Git。
 - Maven 的版本输出中也应显示它正在使用 Java 21。
 - 安装后重新打开终端；编辑器里的终端也需要重新启动才能读取新的环境变量。
@@ -60,7 +60,7 @@ bash scripts/setup-cloud-java.sh
 source /workspace/.dailystudy-tools/env.sh
 ```
 
-这是云环境 Linux x64 的专用脚本。Windows 和 macOS 按文档安装，不执行它。
+这是云环境 Linux x64 的专用脚本。macOS 本地按上面的安装说明操作。
 
 ## 4. 克隆项目并理解当前目录
 
@@ -72,17 +72,11 @@ cd dailyStudy
 git status --short --branch
 ```
 
-已经有这个仓库就不要重复克隆，按跨电脑工作流拉取即可。当前云环境已有仓库，也不需要重复克隆或创建 worktree。
+已经有这个仓库就不要重复克隆，按 Git 同步工作流拉取即可。当前云环境已有仓库，也不需要重复克隆或创建 worktree。
 
 `cd` 会改变当前目录，后面的相对路径都从这个目录开始计算。
 
 检查目录的方法：
-
-```powershell
-# Windows PowerShell
-Get-Location
-Get-ChildItem
-```
 
 ```bash
 # macOS 终端
@@ -285,7 +279,7 @@ Maven 在这里承担什么：
 | `class ... should be declared in a file named ...` | 公开类名与文件名 | 保持名称与大小写一致 |
 | `Could not find or load main class` | classpath、包名、是否编译 | 使用正确输出目录和完整类名 |
 | 修改后输出仍是旧的 | 是否重新编译 | 重新执行 javac 或 Maven compile |
-| 中文乱码 | 源文件是否 UTF-8、终端编码与字体 | 按双平台文档调整显示，不把中文改成乱码字符串 |
+| 中文乱码 | 源文件是否 UTF-8、终端编码与字体 | 按 macOS 文档调整显示，不把中文改成乱码字符串 |
 | Maven 提示缺少 POM | 当前目录里有无 pom.xml | 进入 projects/java-foundations |
 
 一次只改变一个因素。不要遇到错误就同时重装 JDK、IDE 和 Maven。
@@ -303,7 +297,7 @@ Maven 在这里承担什么：
 
 如果计算器运行了，但你无法解释变量、计算或重新编译，就再做一次独立修改。安装成功与掌握内容分别记录。
 
-## 12. 学习记录与跨电脑同步
+## 12. 学习记录与 Git 同步
 
 从项目目录返回仓库根目录：
 
@@ -321,7 +315,7 @@ git commit -m "study: complete day 001 exercises"
 git push origin main
 ```
 
-只提交自己理解和确认的改动；`git status` 里若有其他文件，先查看差异。另一台电脑下次开始前，工作区干净时使用 `git pull --ff-only`。详细冲突处理见 [双平台工作流](../../docs/cross-platform-workflow.md)。
+只提交自己理解和确认的改动；`git status` 里若有其他文件，先查看差异。如果换另一台 Mac 学习，开始前在干净工作区使用 `git pull --ff-only`。详细冲突处理见 [macOS 学习工作流](../../docs/cross-platform-workflow.md)。
 
 ## 13. 今天只需要这些资料
 
