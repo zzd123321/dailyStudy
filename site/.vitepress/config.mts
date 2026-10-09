@@ -24,7 +24,8 @@ export default defineConfig({
       { text: '基础篇 · 前端走向服务端', items: [
         { text: '01 · Java 工具链与程序执行', link: '/lessons/java-toolchain' },
         { text: '02 · HTTP 请求、响应与诊断', link: '/lessons/http' },
-        { text: '03 · Java 输入、控制流与方法', link: '/lessons/java-control-flow' }
+        { text: '03 · Java 输入、控制流与方法', link: '/lessons/java-control-flow' },
+        { text: '04 · 请求链路与服务端状态', link: '/lessons/request-lifecycle' }
       ] }
     ],
     outline: { level: [2, 3], label: '本页内容' },

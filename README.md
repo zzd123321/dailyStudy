@@ -29,10 +29,11 @@ npm run preview
 | [01 · Java 工具链与程序执行](site/lessons/java-toolchain.md) | JDK/JVM、编译与运行、包、classpath、Maven 生命周期 |
 | [02 · HTTP 请求、响应与诊断](site/lessons/http.md) | 契约、方法、JSON、同源、curl、状态码与故障分层 |
 | [03 · Java 输入、控制流与方法](site/lessons/java-control-flow.md) | 解析校验、边界、短路、循环状态、方法与交互程序 |
+| [04 · 请求链路与服务端状态](site/lessons/request-lifecycle.md) | 路由、校验顺序、状态生命周期、持久化与交互式链路推演 |
 | [学习路线](site/learning-path.md) | 后续 Java、数据库、Python 与 AI 的知识依赖 |
 | [macOS 环境](site/setup.md) | Java/Maven/Git/Node 安装与运行 |
 
-目前有前三课完整内容，后续继续加入同一站点。
+目前有前四课完整内容，后续继续加入同一站点。
 
 ```text
 site/                         每课一份 Markdown

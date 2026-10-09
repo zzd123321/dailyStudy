@@ -10,7 +10,10 @@ const courses = [
     link: '/lessons/http', tags: ['接口契约', '状态码', '错误诊断'] },
   { number: '03', topic: 'JAVA · 编程基础', title: '让程序根据输入做决定',
     description: '掌握类型转换、条件判断、循环与方法，一步步构建可以校验和重试的交互程序。',
-    link: '/lessons/java-control-flow', tags: ['输入校验', '控制流', '方法'] }
+    link: '/lessons/java-control-flow', tags: ['输入校验', '控制流', '方法'] },
+  { number: '04', topic: 'WEB · 服务端思维', title: '把请求与数据状态串起来',
+    description: '追踪路由、解析、校验与业务执行，理解刷新、重复请求和服务重启为什么产生不同结果。',
+    link: '/lessons/request-lifecycle', tags: ['请求链路', '内存与持久化', '故障定位'] }
 ]
 </script>
 

@@ -9,8 +9,8 @@ hero:
       text: 开始阅读
       link: /lessons/java-toolchain
     - theme: alt
-      text: 继续第 03 课
-      link: /lessons/java-control-flow
+      text: 阅读第 04 课
+      link: /lessons/request-lifecycle
 ---
 
 <HomeOverview />

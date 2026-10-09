@@ -43,7 +43,7 @@
 .eyebrow { margin: 0 0 12px; font-size: 11px; letter-spacing: 2px; font-weight: 650; color: var(--vp-c-brand-1); }
 .section-intro h2, .path-strip h2 { margin: 0; font-size: 24px; line-height: 1.5; font-weight: 650; }
 .section-intro > p { margin: 0; font-size: 14px; color: var(--vp-c-text-2); line-height: 1.9; }
-.course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.course-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
 .course-card { display: flex; flex-direction: column; padding: 28px; border: 1px solid var(--vp-c-divider); border-radius: 14px; background: var(--vp-c-bg); transition: border-color .2s, transform .2s; }
 .course-card:hover { border-color: var(--vp-c-brand-1); transform: translateY(-3px); }
 .course-card:focus-visible { outline: 3px solid var(--vp-c-brand-1); outline-offset: 4px; }
