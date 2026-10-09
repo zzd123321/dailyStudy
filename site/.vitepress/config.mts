@@ -24,6 +24,9 @@ export default defineConfig({
         { text: '02 · HTTP 请求、响应与诊断', link: '/lessons/http' },
         { text: '03 · Java 输入、控制流与方法', link: '/lessons/java-control-flow' },
         { text: '04 · 请求链路与服务端状态', link: '/lessons/request-lifecycle' }
+      ] },
+      { text: 'Java 篇 · 从语法走向业务', items: [
+        { text: '05 · Java 类、对象与封装', link: '/lessons/java-objects' }
       ] }
     ],
     outline: { level: [2, 3], label: '本页内容' },

@@ -558,4 +558,4 @@ start 绑定并启动服务；route 根据路径和方法选择；handle 把 JSO
 - [Javaer：并发知识目录](https://github.com/itwanger/toBeBetterJavaer#java并发编程)：先了解并发问题，线程、锁和线程池在后续专课实现。
 - [PostgreSQL 教程](https://www.postgresql.org/docs/current/tutorial.html)：后续数据库阶段再深入，当前先理解为什么需要持久存储。
 
-按照你选择的 Java 优先路线，接下来学习**类与对象**：把笔记、任务等业务数据组织成对象，逐步加入集合、异常和保存功能。远程 HTTPS 与登录相关网络知识在 Web 服务阶段补齐。完整安排见 [学习路线](/learning-path)。
+继续 [05 · Java 类、对象与封装](/lessons/java-objects)：把任务数据与允许的操作组织成对象，再逐步学习对象协作、集合、异常和保存功能。远程 HTTPS 与登录相关网络知识在 Web 服务阶段补齐。完整安排见 [学习路线](/learning-path)。

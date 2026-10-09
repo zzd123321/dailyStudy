@@ -30,16 +30,17 @@ npm run preview
 | [02 · HTTP 请求、响应与诊断](site/lessons/http.md) | 请求与契约、方法语义、编码与分页、错误、缓存、CORS 和客户端练习 |
 | [03 · Java 输入、控制流与方法](site/lessons/java-control-flow.md) | 类型与运算、字符串、分支、数组、方法、异常、统计程序和调试 |
 | [04 · 请求链路与服务端状态](site/lessons/request-lifecycle.md) | 路由、分层、生命周期、文件保存、并发、幂等与日志分析 |
+| [05 · Java 类、对象与封装](site/lessons/java-objects.md) | 字段与构造器、封装与状态规则、this、引用传递、static/final 和完整任务示例 |
 | [学习路线](site/learning-path.md) | Java 优先，参考渡一 30 门目录并区分必修与进阶 |
 
-目前有前四课完整内容，后续继续加入同一站点。
+目前有前五课完整内容，后续继续加入同一站点。
 
 ```text
 site/                         每课一份 Markdown
 site/.vitepress/              导航、搜索、主题与构建配置
 lessons/day-001/examples/     第 01 课最小 Java 示例
 lessons/day-003/examples/     第 03 课最小 Java 示例
-projects/java-foundations/   固定计算器与交互式计划器
+projects/java-foundations/   计算器、交互式计划器与任务对象
 projects/http-playground/    HTTP 本地实验服务
 .github/workflows/pages.yml  静态构建与发布
 scripts/setup-cloud-java.sh 云环境工具安装

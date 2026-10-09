@@ -68,13 +68,15 @@ description: 参考渡一 AI 大全栈目录，按 Java 优先的顺序，围绕
 - [03 · Java 输入、控制流与方法](/lessons/java-control-flow)：用运算、字符串、分支、数组和方法完成统计程序，练习异常与调试。
 - [04 · 请求链路与服务端状态](/lessons/request-lifecycle)：追踪数据生命周期，做独立文件保存实验，初步分析分层、并发、幂等与日志。
 
-下一课继续 Java 的类与对象，再接集合、异常与文件读写。DNS、TCP、TLS、Cookie、Session、CORS 和 CSRF 在 Web 接口、登录与联调时展开。
+接下来从 [第 05 课：Java 类、对象与封装](/lessons/java-objects) 进入系统的 Java 编程，再学习对象协作、继承与接口、集合、异常与文件读写。DNS、TCP、TLS、Cookie、Session、CORS 和 CSRF 在 Web 接口、登录与联调时展开。
 
 **进入下一阶段的标准：** 能修改一个小程序；用 curl 创建并读取条目；解释编译成功、HTTP 成功与数据保存之间的区别。
 
 ## 阶段 1：系统学会 Java 编程
 
 ### Java：从计算器走向业务对象
+
+已发布 [05 · Java 类、对象与封装](/lessons/java-objects)：用任务模型理解字段、构造器、this、封装、状态规则、引用传递与 static，并提供完整 Java 示例和综合练习。
 
 类型与方法 → 类、构造器、封装、继承与多态 → 抽象类与接口 → List/Map 与泛型 → lambda 与 Stream → 异常 → 文件读写 → 日期时间 → 单元测试。注解与反射放在理解框架时展开。
 
@@ -288,5 +290,5 @@ Nginx 配合域名、DNS、TLS 与静态资源托管；云平台补安全组、I
 参考入口：[渡一 AI 大全栈目录](https://app.duyiedu.com/toc-detail?productId=54a002b2-1227-4207-9aed-e75be9cdb590)。本版已依据你提供的 30 门课程及其章节文字完成主题对照；讲解与项目实现继续使用本网站自己的内容。
 
 ::: tip 当前可阅读内容
-目前有 01–04 四课完整正文。上面的后续阶段是学习路线，不代表所有课程已经发布。继续阅读从 [第 01 课](/lessons/java-toolchain) 或你当前的课程开始即可。
+目前有 01–05 五课完整正文。上面的后续阶段是学习路线，不代表所有课程已经发布。已完成基础篇时，可以继续 [第 05 课](/lessons/java-objects)。
 :::

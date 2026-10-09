@@ -13,7 +13,10 @@ const courses = [
     link: '/lessons/java-control-flow', tags: ['输入校验', '控制流', '方法'] },
   { number: '04', topic: 'WEB · 服务端思维', title: '把请求与数据状态串起来',
     description: '追踪笔记创建、刷新与重启，验证文件保存，再分析分层、并发、幂等和日志。',
-    link: '/lessons/request-lifecycle', tags: ['请求链路', '内存与持久化', '故障定位'] }
+    link: '/lessons/request-lifecycle', tags: ['请求链路', '内存与持久化', '故障定位'] },
+  { number: '05', topic: 'JAVA · 业务对象', title: '让对象维护自己的规则',
+    description: '从两条任务理解实例、构造器和封装，用改名、完成与重新打开串联状态、引用和 static。',
+    link: '/lessons/java-objects', tags: ['类与对象', '封装与状态', '引用传递'] }
 ]
 </script>
 
