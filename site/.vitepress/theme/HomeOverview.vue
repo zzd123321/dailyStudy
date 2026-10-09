@@ -2,32 +2,32 @@
 import { withBase } from 'vitepress'
 
 const courses = [
-  { number: '01', topic: 'JAVA · 工具链', title: '代码如何成为一个程序',
-    description: '从问候与计算器理解编译运行，再用包、命令行参数、JAR 与 Maven 完成独立交付。',
-    link: '/lessons/java-toolchain', tags: ['JDK', '编译与运行', 'Maven'] },
-  { number: '02', topic: 'WEB · 请求链路', title: '看懂一次 HTTP 交换',
-    description: '从笔记接口走到方法语义、参数编码、缓存与跨源，写出检查状态和结构的客户端。',
-    link: '/lessons/http', tags: ['接口契约', '状态码', '错误诊断'] },
-  { number: '03', topic: 'JAVA · 编程基础', title: '让程序根据输入做决定',
-    description: '用输入、运算、判断、数组与方法写出统计程序，再练习错误重试和断点调试。',
-    link: '/lessons/java-control-flow', tags: ['输入校验', '控制流', '方法'] },
-  { number: '04', topic: 'WEB · 服务端思维', title: '把请求与数据状态串起来',
-    description: '追踪笔记创建、刷新与重启，验证文件保存，再分析分层、并发、幂等和日志。',
-    link: '/lessons/request-lifecycle', tags: ['请求链路', '内存与持久化', '故障定位'] },
-  { number: '05', topic: 'JAVA · 业务对象', title: '让对象维护自己的规则',
-    description: '从两条任务理解实例、构造器和封装，用改名、完成与重新打开串联状态、引用和 static。',
-    link: '/lessons/java-objects', tags: ['类与对象', '封装与状态', '引用传递'] },
-  { number: '06', topic: 'JAVA · 对象协作', title: '让多个对象各负其责',
-    description: '为同一批任务生成两种清单，串联接口、多态与继承，理解构造器传入依赖和组合的用途。',
-    link: '/lessons/java-collaboration', tags: ['接口与多态', '继承与抽象类', '组合与分工'] }
+  { number: '01', topic: 'JAVA 基础', title: '程序结构、编译与运行',
+    description: '第一个 Java 程序，class 与 main，源码与字节码，变量、参数和编译错误。',
+    link: '/lessons/java-toolchain', tags: ['程序结构', 'javac / java', '包与 Maven'] },
+  { number: '02', topic: 'JAVA 基础', title: '基本语法、数组与方法',
+    description: '学习变量、运算、字符串、分支与循环，用成绩统计练习数组、输入和返回值。',
+    link: '/lessons/java-control-flow', tags: ['类型与运算', '控制流', '数组与方法'] },
+  { number: '03', topic: 'JAVA 基础', title: '类、对象与封装',
+    description: '创建任务对象，学习字段、构造器和实例方法，分析引用、参数传递与状态修改。',
+    link: '/lessons/java-objects', tags: ['类与对象', '构造器', '引用与封装'] },
+  { number: '04', topic: 'JAVA 基础', title: '继承、接口与多态',
+    description: '从员工与消息输出的小程序理解 super、重写和接口，再应用到任务清单。',
+    link: '/lessons/java-collaboration', tags: ['继承与重写', '接口与多态', '组合'] },
+  { number: 'A', topic: 'WEB 专题', title: 'HTTP 请求与响应',
+    description: '查询和创建笔记，观察方法、URL、头与正文，练习状态检查和 Fetch 错误处理。',
+    link: '/lessons/http', tags: ['HTTP 消息', '状态码', 'Fetch'] },
+  { number: 'B', topic: 'WEB 专题', title: '请求处理与数据保存',
+    description: '观察路由、解析、校验与存储，用刷新、重启和文件实验区分数据的保存位置。',
+    link: '/lessons/request-lifecycle', tags: ['服务进程', '路由与校验', '内存与文件'] }
 ]
 </script>
 
 <template>
   <section class="course-overview" aria-labelledby="courses-title">
     <div class="section-intro">
-      <div><p class="eyebrow">THE FOUNDATION</p><h2 id="courses-title">从这里建立后端思维</h2></div>
-      <p>按顺序理解概念，再用代码检验理解。<br>讲解、示例、练习与答案，都在同一页。</p>
+      <div><p class="eyebrow">CONTENTS</p><h2 id="courses-title">课程目录</h2></div>
+      <p>先读 Java 01–04，Web 内容单独阅读。<br>每篇包含讲解、代码、练习和参考教材。</p>
     </div>
     <div class="course-grid">
       <a v-for="course in courses" :key="course.number" :href="withBase(course.link)" class="course-card">
@@ -38,7 +38,7 @@ const courses = [
       </a>
     </div>
     <div class="path-strip">
-      <div><p class="eyebrow">THE BIG PICTURE</p><h2>把已有前端能力，接到完整系统。</h2></div>
+      <div><p class="eyebrow">READING LIST</p><h2>教材与后续章节</h2></div>
       <p>Java 基础 <span>→</span> 数据库与 Spring Boot <span>→</span> Python 与大模型 <span>→</span> RAG、Agent 与交付</p>
       <a :href="withBase('/learning-path')">查看完整学习路线 <span aria-hidden="true">→</span></a>
     </div>

@@ -25,7 +25,7 @@ const labels = { pass: '已经过', stop: '在此结束或提前返回', skip: '
     <select id="flow-scenario" v-model="selected">
       <option v-for="item in scenarios" :key="item.key" :value="item.key">{{ item.name }}</option>
     </select>
-    <p class="flow-caption">按本实验服务的规则推演。实际请求请在 Mac 上运行后面的 curl 实验。</p>
+    <p class="flow-caption">按实验服务源码展示处理步骤。实际请求使用正文中的 curl 命令验证。</p>
     <pre class="flow-request"><code>{{ current.request }}</code></pre>
     <ol class="flow-steps">
       <li v-for="(step, index) in steps" :key="step" :class="state(index)">

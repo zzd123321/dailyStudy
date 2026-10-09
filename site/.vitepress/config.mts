@@ -19,15 +19,15 @@ export default defineConfig({
       { text: '开始阅读', items: [
         { text: '学习路线', link: '/learning-path' }
       ] },
-      { text: '基础篇 · 前端走向服务端', items: [
-        { text: '01 · Java 工具链与程序执行', link: '/lessons/java-toolchain' },
-        { text: '02 · HTTP 请求、响应与诊断', link: '/lessons/http' },
-        { text: '03 · Java 输入、控制流与方法', link: '/lessons/java-control-flow' },
-        { text: '04 · 请求链路与服务端状态', link: '/lessons/request-lifecycle' }
+      { text: 'Java 基础', items: [
+        { text: '01 · 程序结构、编译与运行', link: '/lessons/java-toolchain' },
+        { text: '02 · 基本语法、数组与方法', link: '/lessons/java-control-flow' },
+        { text: '03 · 类、对象与封装', link: '/lessons/java-objects' },
+        { text: '04 · 继承、接口与多态', link: '/lessons/java-collaboration' }
       ] },
-      { text: 'Java 篇 · 从语法走向业务', items: [
-        { text: '05 · Java 类、对象与封装', link: '/lessons/java-objects' },
-        { text: '06 · 对象协作、继承与接口', link: '/lessons/java-collaboration' }
+      { text: 'Web 基础专题', items: [
+        { text: 'A · HTTP 请求与响应', link: '/lessons/http' },
+        { text: 'B · 请求处理与数据保存', link: '/lessons/request-lifecycle' }
       ] }
     ],
     outline: { level: [2, 3], label: '本页内容' },
@@ -49,6 +49,6 @@ export default defineConfig({
     sidebarMenuLabel: '课程目录',
     returnToTopLabel: '返回顶部',
     externalLinkIcon: true,
-    footer: { message: '理解原理，写出代码，解释结果。', copyright: 'dailyStudy · AI 应用全栈知识课程' }
+    footer: { message: 'Java、Web 与 AI 应用开发', copyright: 'dailyStudy · 教程与示例代码' }
   }
 })

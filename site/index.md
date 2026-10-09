@@ -1,16 +1,16 @@
 ---
 layout: home
 hero:
-  name: 从前端，到 AI 全栈。
-  text: 理解每一层，做出完整应用。
-  tagline: 为有前端经验的开发者准备的知识课程。先学 Java、数据库和 Spring Boot，再接 Python、大模型、RAG 与 Agent。
+  name: Java 与 AI 应用开发
+  text: 教程、练习与示例代码
+  tagline: Java 基础、数据库、Spring Boot、Python 和大模型应用。参考大学课程、官方文档与中文开源教材。
   actions:
     - theme: brand
       text: 开始阅读
       link: /lessons/java-toolchain
     - theme: alt
-      text: 阅读第 06 课
-      link: /lessons/java-collaboration
+      text: 教材与学习路线
+      link: /learning-path
 ---
 
 <HomeOverview />
