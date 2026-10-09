@@ -1,210 +1,174 @@
 ---
-description: 从字符串输入到校验、循环和方法，逐步写出可以处理错误输入的 Java 交互式程序。
+description: 把固定数字改成用户输入，通过学习时长计算器学会类型转换、判断、循环、方法和错误处理。
 ---
 
 # 03 · Java 输入、控制流与方法
 
-第 01 课的计算器只处理固定值，第 02 课展示了接口对输入进行校验。本课把它们串起来，构建一个交互式计划器：**读取输入 → 解析类型 → 校验规则 → 计算 → 输出 → 决定是否继续**。
+第 01 课的程序写死了每周四天、每天 2.5 小时，所以无论谁运行，结果都是每周 10 小时。
 
-先掌握最小例子里的类型、分支、循环和方法，再理解完整版的错误恢复。包装类型、异常和资源管理只解释本例用到的部分，后面会系统展开。
+现在我们让使用者自己输入，并让程序回答三个问题：一周多少小时？是否符合每周 8–12 小时的当前计划？连续三周会累计多少小时？
 
-## 同步并运行最小例子
+这些问题分别需要**输入、条件判断、循环**。最后把计算提取成方法，你就能看懂很多后端逻辑的基本结构。
 
-在 Mac 的仓库根目录，先保存自己的未提交练习，工作区干净时执行：
+## 先运行一个足够小的完整程序
 
-```bash
-git pull --ff-only origin main
-cd lessons/day-003
-javac -encoding UTF-8 -d out examples/InputBasics.java
-java -cp out InputBasics
-```
-
-按提示输入，**每输入一项按 Enter**：
-
-```text
-你的称呼：前端开发者
-每周学习天数：4
-每天学习小时：2.5
-```
-
-应看到每周 10.0 小时，以及前 3 周累计 10.0、20.0、30.0。
-
-打开 examples/InputBasics.java。这个例子约三十行，用于认识核心语法，先输入合法数字；它尚未处理 abc、空白名称、负数等错误。后面的完整学习计划器会补齐校验，别把最小例子当作已具备全部输入保护的程序。
-
-下面直接引用仓库的源码，阅读时可以对照每一步；后面的讲解会逐项拆开。
+这是完整源码，不需要补其他文件。它也已经放在仓库的 `lessons/day-003/examples/InputBasics.java` 中：
 
 <<< @/../lessons/day-003/examples/InputBasics.java
 
+从 Mac 的仓库根目录执行：
 
-## 类型与 TypeScript 的区别
+```bash
+cd lessons/day-003/examples
+mkdir -p out
+javac -encoding UTF-8 -d out InputBasics.java
+java -cp out InputBasics
+```
 
-| 用途 | Java 示例 | TypeScript 中的近似表达 |
+按提示每次输入一行，依次输入 `小林`、`4`、`2.5`，每行按回车。预期结果包括：
+
+```text
+小林每周计划学习 10.0 小时。
+符合当前学习节奏。
+第 1 周累计：10.0
+第 2 周累计：20.0
+第 3 周累计：30.0
+```
+
+先使用这些合法数字。这个最小例子暂时不处理乱输内容；后半课再给它加上错误处理。接下来每段代码都取自这个程序或是明确标注的练习片段。
+
+## 输入进来的是文字，计算需要数字
+
+看这三行：
+
+```java
+String name = input.nextLine();
+int days = Integer.parseInt(input.nextLine());
+double hours = Double.parseDouble(input.nextLine());
+```
+
+`nextLine()` 读取到回车之前的一整行，结果是 String。即使键盘输入 `4`，刚读到的也是文本 `"4"`。
+
+计算前，需要把文本转换成数字：
+
+```text
+键盘输入 4 → nextLine 得到 "4" → parseInt 得到整数 4
+键盘输入 2.5 → nextLine 得到 "2.5" → parseDouble 得到小数 2.5
+```
+
+可以与前端经验对照：JavaScript 的 `Number('4')` 也是转换，但 Java 的 `Integer.parseInt("四")` 会抛出异常，而不是返回 NaN。两种语言的失败行为不同。
+
+| 类型 | 本例变量 | 保存什么 |
 |---|---|---|
-| 文本 | `String name = "A";` | `const name: string = 'A';` |
-| 整数 | `int days = 4;` | `const days: number = 4;` |
-| 浮点数 | `double hours = 2.5;` | `const hours: number = 2.5;` |
-| 布尔值 | `boolean valid = true;` | `const valid: boolean = true;` |
+| `String` | name | 文本，如“小林” |
+| `int` | days | 整数，如 4 |
+| `double` | hours | 浮点数，如 2.5 |
+| `boolean` | 条件表达式的结果 | true 或 false |
 
-Java 将整数与浮点类型区分开。`int days = 2.5;` 无法直接编译，不能因为界面显示数字就忽略后端类型。
+Java 的 `int` 与 `double` 是不同类型。这里天数只允许整数，小时数可以有小数，因此分别选择它们。
 
-```java
-int days = 4;
-double hours = 2.5;
-double weeklyHours = days * hours;
-```
-
-days 在参与浮点运算时转换为相应数值，结果使用 double。
-
-回忆整数除法：
-
-```java
-System.out.println(5 / 2);    // 2
-System.out.println(5.0 / 2);  // 2.5
-```
-
-此外，double 有浮点精度限制。本例报表保留两位小数便于阅读，计算中保留实际 double 值；金钱相关精确计算后续单独学习。
-
-
-## 用 Scanner 读取一整行
+### Scanner 是怎样接到键盘的
 
 ```java
 Scanner input = new Scanner(System.in, StandardCharsets.UTF_8);
-String text = input.nextLine();
 ```
 
-- System.in：程序的标准输入，通常连接终端。
-- Scanner：读取输入的工具类，使用前需要 import。
-- nextLine()：读入一整行，得到 String。
-- 用户按 Enter 后，程序才能继续处理该行。
+`System.in` 是程序的标准输入，交互运行时通常来自终端。Scanner 帮你从这个输入源读取数据；`input` 是我们给读取工具起的变量名。
 
-注意：**用户输入数字，看起来像数字，读入后仍可能是字符串。**
+文件开头的 `import` 告诉编译器 Scanner 和 StandardCharsets 来自哪里，不会启动另一个程序。
 
-```java
-String text = input.nextLine();
-int days = Integer.parseInt(text);
-```
+最外面的 `try (...) { ... }` 会在代码块结束时关闭 Scanner。这叫资源管理，先会使用；学文件、数据库连接时再讲它的完整原理。
 
-将这个过程拆开，便于检查：输入是什么？能否解析？解析后范围是否合法？
+::: details 为什么统一使用 nextLine，而不是混用 nextInt？
+`nextInt()` 读取数字 token，通常留下行尾换行；紧接着 `nextLine()` 可能只读到剩下的空行。这很容易让初学者误以为程序跳过了输入。
 
-### 为什么本课统一 nextLine
+本例统一“读取一行 → 转换”，输入处理更一致。不是说 nextInt 不能用，而是现在选择更容易推演的方式。
 
-Scanner 的 nextInt() 读取数字 token，而 nextLine() 读取行。如果混用且不处理遗留的行尾，可能读到意外的空字符串。本课统一读整行，再显式转换，先减少这类干扰。
+浮点数也不能精确表示所有十进制小数，例如 0.1。当前时长估算使用 double 足够；金额等需要明确精度与舍入规则时，会学习 BigDecimal。
+:::
 
-完整例子还会用 strip() 去掉首尾空白：输入 ` 4 ` 可以按 4 处理；名字只包含空白时则应拒绝。
+## if：程序怎样根据数字作决定
 
-源文件中的 `try (Scanner ...)` 会在结束时关闭该资源。它是资源管理语法；本课记住本 CLI 只创建一个 Scanner，退出后关闭即可。
-
-
-## 输入能解析，不等于符合规则
-
-下面三个输入的问题不同：
-
-| 输入 | 能否作为整数解析 | 是否满足“天数为 1–7” |
-|---|---|---|
-| `4` | 可以 | 是 |
-| `8` | 可以 | 否 |
-| `abc` | 不可以 | 尚未进入范围判断 |
-
-### 用 if 校验范围
+现在已经算出 `weeklyHours`，例如 10.0：
 
 ```java
-if (days >= 1 && days <= 7) {
-    System.out.println("天数合法");
+if (weeklyHours >= 8.0 && weeklyHours <= 12.0) {
+    System.out.println("符合当前学习节奏。");
 } else {
-    System.out.println("请输入 1–7 之间的整数");
+    System.out.println("需要调整任务量或学习时间。");
 }
 ```
 
-- `&&`：两个条件都要成立。
-- `||`：任一条件成立即可。
-- `!`：逻辑取反。
-- Java 的 if 条件必须是 boolean。不能写 `if (days)` 来判断非零。
+用中文读它：**如果每周小时数至少 8，且不超过 12，就输出符合；否则输出需要调整。**
 
-范围错误也可以反过来表达：
+`>=` 和 `<=` 含边界，所以 8.0、12.0 都符合。`&&` 表示两个条件同时成立；`||` 表示至少一个成立；`!` 表示取反。
 
-```java
-if (days < 1 || days > 7) {
-    System.out.println("天数超出范围");
-}
-```
+把输入改成两天、每天两小时，得到 4.0。第一个条件已经不成立，程序进入 else。
 
-### 用 if/else if/else 分类
+### 多于两种结果，用 else if
+
+如果你希望分别说明投入偏低、符合、偏高，可把原判断替换为这个片段：
 
 ```java
 if (weeklyHours < 8.0) {
-    System.out.println("低于建议投入");
+    System.out.println("投入偏低，可以缩小每周目标。");
 } else if (weeklyHours <= 12.0) {
-    System.out.println("符合当前节奏");
+    System.out.println("符合当前学习节奏。");
 } else {
-    System.out.println("高于建议投入");
+    System.out.println("投入偏高，注意留出休息时间。");
 }
 ```
 
-判断从上到下执行，只进入第一个匹配分支。第二个分支执行时，第一个条件已经不成立，因此 weeklyHours 已经不小于 8。
+为什么第二个条件不再写 `>= 8.0`？因为只有前面的 `< 8.0` 不成立，才有机会来到这里。分支按顺序检查，只执行第一条满足条件的分支。
 
-先预测：7.99、8、12、12.01 分别进入哪个分支？边界值值得专门验证。
+**判断顺序也是逻辑的一部分。** 不能把 `<= 12.0` 放在最前面，否则 4.0 也会被误判为符合。
 
-### 字符串比较
+::: details 赋值、数字相等和字符串相等
+`=` 是赋值，`==` 是比较。Java 的 if 条件必须是 boolean，不像 JavaScript 那样直接把任意数值当真假。
 
-```java
-if (choice.equalsIgnoreCase("y")) {
-    System.out.println("继续");
-}
-```
+数字可以用 `days == 4`；比较字符串内容用 `text.equals("q")`。`==` 对引用比较的是是否指向同一对象，不应拿来判断两个输入字符串的内容是否相同。
 
-字符串内容比较使用 equals；忽略大小写时使用 equalsIgnoreCase。`==` 对引用类型比较对象引用，不适合直接判断读入文字内容是否相同。
+想让 q 和 Q 都能退出，可用 `text.equalsIgnoreCase("q")`。调用方法前还要知道 text 是否可能为 null，后面的完整程序会处理这一点。
+:::
 
-本例必须先确定 choice 不是 null，再调用其方法。
+## for：重复做一件事，但每次周数不同
 
-
-## for：重复已知次数的操作
+不必手写三条打印语句：
 
 ```java
-double accumulated = 0.0;
 for (int week = 1; week <= 3; week++) {
-    accumulated += weeklyHours;
-    System.out.println("第 " + week + " 周累计：" + accumulated);
+    System.out.println("第 " + week + " 周累计：" + (week * weeklyHours));
 }
 ```
 
-依次发生：
+括号中的三部分，按这个顺序起作用：
 
-1. 初始化 week=1，只执行一次。
-2. 判断 week<=3，成立才进入循环体。
-3. 累加并输出。
-4. 执行 week++，再回到条件判断。
+1. `int week = 1`：开始之前执行一次，从第 1 周算起。
+2. `week <= 3`：每次执行循环体之前判断，符合才继续。
+3. `week++`：本轮打印后，把周数加 1，再回到判断。
 
-输入每周 10 小时时，累计值是 10、20、30。`week <= 3` 包含第 3 次；改成 `< 3` 会少一次。
+每周 10 小时时，完整推演是：
 
-week 在 for 内声明，不能随意在循环外继续使用。变量的作用域由声明位置与代码块决定。
+| 检查时的 week | 条件是否成立 | 打印累计时长 | 随后发生什么 |
+|---:|---|---:|---|
+| 1 | 成立 | 10 | week 变成 2 |
+| 2 | 成立 | 20 | week 变成 3 |
+| 3 | 成立 | 30 | week 变成 4 |
+| 4 | 不成立 | 不打印 | 循环结束 |
 
-完整程序还检查实际计划周数，所以计划只有两周时不会预览第 3 周。
+注意不是“跑完第三次就自动停”，而是下一次条件检查不成立才停。把 `<= 3` 改为 `< 3`，就只打印前两周。
 
+本例直接用 `week * weeklyHours` 算累计。也可以用一个变量每次加一周时长，两者在每周时长固定时得到相同结果。
 
-## while：等待有效输入或退出
+## 方法：给一段计算起名字
 
-输入可能连续出错，重复次数事先未知。适合用 while：
+main 中调用：
 
 ```java
-while (true) {
-    String text = input.nextLine();
-    if (text.equalsIgnoreCase("q")) {
-        break;
-    }
-    System.out.println("本次读到：" + text);
-}
+double weeklyHours = calculateWeeklyHours(days, hours);
 ```
 
-`while (true)` 本身不决定什么时候结束，必须设计出口。真实读取还要处理输入流结束；本课完整程序用 hasNextLine() 检查。
-
-- break：离开当前循环。
-- continue：跳过本轮剩余语句，进入下一轮。
-- return：结束当前方法，可返回结果。
-
-本课的完整程序主要使用 break 和 return；continue 留作练习理解。每次重试都必须读取新的输入，否则可能一直判断同一份错误数据。
-
-
-## 方法：把计算从读取和打印中拆出来
+类中定义：
 
 ```java
 static double calculateWeeklyHours(int days, double hours) {
@@ -212,449 +176,221 @@ static double calculateWeeklyHours(int days, double hours) {
 }
 ```
 
-| 部分 | 含义 |
-|---|---|
-| static | 本课无需创建对象即可调用这个类的方法 |
-| double | 返回值类型 |
-| calculateWeeklyHours | 方法名 |
-| int days, double hours | 参数及其类型 |
-| return | 将结果交还调用方 |
+可以读成：“这个叫 calculateWeeklyHours 的方法，接收一个整数和一个浮点数，计算乘积，并返回一个浮点数。”
 
-调用：
-
-```java
-double weeklyHours = calculateWeeklyHours(4, 2.5);
+```text
+调用时传入 4 和 2.5
+       ↓
+方法参数 days=4，hours=2.5
+       ↓
+return 4 * 2.5
+       ↓
+调用处得到 10.0，存入 weeklyHours
 ```
 
-方法定义写在类内部，与 main 并列；不要把 calculateWeeklyHours 的定义直接写进 main 方法体。调用语句则可以放在 main 中。
+方法的参数是它收到的数据，`return` 是把结果交给调用处，并结束本次方法执行。这里的 static 让 main 能直接调用这个方法；实例方法等学完对象再比较。
 
-方法内部的参数值来自这次调用。`return` 与 println 不同：前者把结果交给调用方，后者产生输出。得到返回值后，你可以继续计算、判断或打印。
+### 返回和打印，用途不同
 
-本例分工：
+`System.out.println(10.0)` 只是向终端显示，不能把显示出来的文字当成计算返回值。`return 10.0` 则把结果交给调用者，后者可以继续用于判断、循环或保存。
 
-- 读取方法：获得有效输入，或识别取消。
-- 计算方法：处理已经通过校验的数值。
-- 分类方法：返回学习节奏说明。
-- 报表方法：组织输出。
+这与前端函数一样：计算函数返回数据，页面决定怎样展示。把两件事分开，后面同一个计算逻辑就能用于终端、HTTP 接口或测试。
 
-先写清楚这些小职责，再学习面向对象与框架，会更容易理解层次。
-
-
-## 处理错误解析：一次最小 try/catch
+::: details 方法放在哪里？变量在哪里能访问？
+Java 的普通方法定义在类的内部、其他方法的外部，不要把方法声明塞进 main。
 
 ```java
-try {
-    int value = Integer.parseInt(text);
-    // 接着检查数值范围。
-} catch (NumberFormatException e) {
-    System.out.println("请输入整数");
+public class Example {
+    public static void main(String[] args) {
+        double result = twice(2.5);
+        System.out.println(result);
+    }
+
+    static double twice(double value) {
+        return value * 2;
+    }
 }
 ```
 
-parseInt 无法把 abc 转成整数时会抛出异常。catch 处理这类预期输入错误，再让读取循环重试。转换成功的 8 仍需范围校验，不能仅靠 try/catch 解决。
+main 中的 result 是局部变量；twice 中的 value 是该方法的参数。twice 不能直接访问 main 的 result，需要通过参数传入数据。for 声明的 week 也不能在循环结束后随意使用。
 
-本课只认识这一类恢复操作，异常体系在后面的课程展开。不要用笼统的 catch(Exception) 把所有错误悄悄忽略。
+参数名与调用者的变量名不必相同，传递的是值。现在先用基本类型理解，之后对象课再展开引用值的传递。
+:::
 
-Double.parseDouble 还能解析 NaN、Infinity 等特殊值；只写范围否定判断可能漏掉 NaN。完整程序用 Double.isFinite(hours) 先确认它是有限数，再校验 0.5–6.0 的范围。
+## 错误输入：读得懂，不等于允许使用
 
+现在试着在天数里输入 `四`，最小程序会报 `NumberFormatException`；输入 `9` 则能转换成数字，却不符合“一周最多七天”的规则。
 
-## 类型转换：自动提升与强制转换
+这是两类问题：
 
-Java 会在允许的运算中提升数值类型，但不会把所有转换都当成安全操作：
-
-```java
-int days = 4;
-double asDouble = days;       // 4.0，允许的整数到 double 转换
-double hours = 2.5;
-int truncated = (int) hours;  // 2，截去小数，不是四舍五入
+```text
+"四" → 无法转换成整数 → 解析失败
+"9"  → 能转换成整数 9 → 规则校验失败
+"4"  → 能转换成整数 4 → 规则校验通过
 ```
 
-强制转换 `(int)` 表示你明确要求改变数值表示，可能丢失信息。它不适合用来掩盖“学习小时需要小数”的业务需求，也不会把字符串解析成数字；字符串仍要使用解析方法。
+第 02 课的 JSON 解析与字段校验也是这个区别：先读懂输入，再判断是否可接受。
+
+### 把一次读取变成“直到合法或退出”
+
+下面是一个**完整独立练习程序**。可以在同一个 examples 目录新建 `ReadDays.java`，编译后运行：
 
 ```java
-double ratio = 5 / 2;          // 2.0，整数除法已经先完成
-double exactRatio = 5.0 / 2;   // 2.5
-double another = (double) 5 / 2; // 2.5
-```
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
-左边变量是 double，不会反过来改变右边已经发生的运算。先看操作数，再看运算结果，最后看赋值。
+public class ReadDays {
+    public static void main(String[] args) {
+        try (Scanner input = new Scanner(System.in, StandardCharsets.UTF_8)) {
+            while (true) {
+                System.out.print("天数（1–7），q 退出：");
+                if (!input.hasNextLine()) break;
+                String text = input.nextLine().strip();
+                if (text.equalsIgnoreCase("q")) break;
 
-Java 的整数有有限范围，`int` 不是任意大小的数字。`Integer.parseInt("999999999999")` 会抛出 `NumberFormatException`，因为结果无法用 int 表示。以后涉及 ID、金额和大数量时，应按业务选择类型。
-
-## 从一个输入，推演完整处理流程
-
-对“每周天数”使用四个输入，逐步检查不同阶段：
-
-| 输入 | 去空白后 | 整数解析 | 范围检查 | 结果 |
-|---|---|---|---|---|
-| ` 4 ` | `4` | 成功得到 4 | 1–7，合法 | 返回 4 |
-| `8` | `8` | 成功得到 8 | 不合法 | 提示并重试 |
-| `abc` | `abc` | 抛异常 | 不执行 | 提示并重试 |
-| `q` | `q` | 不尝试 | 不执行 | 取消读取 |
-
-q 应在数字解析前处理，否则会被当成普通非法数字。完整程序用一个读取方法统一处理去空白、取消和输入结束，再由具体读取方法进行解析与校验。
-
-### 不要用一个默认值同时表示失败与合法结果
-
-```java
-// 容易出错的约定：解析失败时返回 0。
-```
-
-如果某项业务允许 0，就无法判断这是用户真的输入 0，还是转换失败。当前计划器选择 `Integer`/`Double` 加 null 表示取消，合法值则明确在范围内。这个约定需要调用方检查：
-
-```java
-Integer days = readInt(input, out, "每周天数：", 1, 7);
-if (days == null) {
-    // 结束当前计算流程，不使用这份输入。
-    return;
+                try {
+                    int days = Integer.parseInt(text);
+                    if (days >= 1 && days <= 7) {
+                        System.out.println("已接受：" + days);
+                        break;
+                    }
+                    System.out.println("数字要在 1–7 之间。");
+                } catch (NumberFormatException error) {
+                    System.out.println("请使用整数，例如 4。");
+                }
+            }
+        }
+    }
 }
 ```
-
-这是完整类内部的调用片段，不是单独可运行的程序。`Integer` 是包装类型，能容纳 null；`int` 不能。对 null 自动拆箱会抛出异常，所以应先处理取消，再参与计算。以后还会学习更明确的结果类型。
-
-## 布尔运算与短路：顺序会影响是否安全
-
-```java
-if (choice != null && choice.equalsIgnoreCase("y")) {
-    System.out.println("继续");
-}
-```
-
-`&&` 的左侧为 false 时，不执行右侧，所以 choice 为 null 时不会调用它的方法。顺序反过来就失去了这层保护。
-
-`||` 在左侧为 true 时不执行右侧。例如：
-
-```java
-if (days < 1 || days > 7) {
-    System.out.println("范围错误");
-}
-```
-
-运算符优先级中，比较先于 `&&`，`&&` 先于 `||`。混合条件时加括号，把业务意图直接写出来：
-
-```java
-boolean canStudy = (days >= 1 && days <= 7) && hours >= 0.5;
-```
-
-`=` 是赋值，`==` 是比较；不要用单个 `&`/`|` 替代 `&&`/`||` 来表达需要短路的输入检查。
-
-### String 的内容比较
-
-```java
-String a = new String("y");
-String b = new String("y");
-System.out.println(a == b);       // false：不同对象
-System.out.println(a.equals(b));  // true：内容相同
-```
-
-字符串字面量可能共享对象，导致某些 `==` 实验“恰好成功”。输入来自 Scanner 时，不应依赖这种现象。判断内容使用 equals 或 equalsIgnoreCase。
-
-## 循环的状态：哪些值应该在每轮重置
-
-看一段累计：
-
-```java
-double weeklyHours = 10.0;
-double accumulated = 0.0;
-for (int week = 1; week <= 3; week++) {
-    accumulated += weeklyHours;
-    System.out.println(accumulated);
-}
-```
-
-| 进入循环时的 week | 累加前 | 累加后 | 下一次 week |
-|---:|---:|---:|---:|
-| 1 | 0 | 10 | 2 |
-| 2 | 10 | 20 | 3 |
-| 3 | 20 | 30 | 4，结束 |
-
-如果把 accumulated 声明并初始化在循环体内，每次都会归零，得到 10、10、10。它应该跨本次报表的多轮循环保留，但下一次重新生成报表时应从 0 开始。
-
-完整计划器的外层循环负责“一轮新计算”，读取方法的内层循环负责“同一字段重试”。这两个层次不能混淆：一天数输错应重读天数，而不是丢掉所有已输入内容；选择 y 则应该重新读取全部参数。
-
-### break、continue 与 return 的范围
-
-- break：退出当前最内层循环，继续循环后面的代码。
-- continue：跳过当前循环这一轮剩余语句，for 接着执行更新表达式，while 接着检查条件。
-- return：退出当前方法，将结果交给调用者；它不是“退出所有循环”的另一个拼写。
-
-没有继续条件变化或出口的循环可能永不结束。输入重试循环必须读取新值；否则它会一直处理同一份错误输入。
-
-## 方法、局部变量与职责边界
-
-```java
-static double calculateTotalHours(double weeklyHours, int weeks) {
-    double total = weeklyHours * weeks;
-    return total;
-}
-```
-
-方法里的 total 只在方法作用域内有效。调用方通过返回值获得结果，不是直接读取这个局部变量：
-
-```java
-double planned = calculateTotalHours(10.0, 48);
-System.out.println(planned);
-```
-
-对本例的基本类型参数，方法收到的是值的副本。修改参数不会修改调用方的变量：
-
-```java
-static int addOne(int value) {
-    value = value + 1;
-    return value;
-}
-// 在 main 中：
-int original = 4;
-int result = addOne(original);
-// original 仍为 4，result 为 5。
-```
-
-Java 的参数传递是按值传递；对象参数以后会讲，这里先理解整数和浮点参数。
-
-计算方法只接收有效数值并返回结果，不依赖 Scanner 或终端，因而更容易验证。读取方法处理交互，报表方法处理显示。这样的拆分也会延伸到后端的控制器、业务逻辑与数据访问。
-
-本课的方法是为了清楚组织小程序，不要求每一行都拆成单独方法。以职责是否清楚、是否能独立解释和验证为准。
-
-## 运行完整的交互式计划器
-
-从当前 lessons/day-003 返回仓库根目录，再进入项目：
 
 ```bash
-cd ../..
+javac -encoding UTF-8 -d out ReadDays.java
+java -cp out ReadDays
+```
+
+这里 `while (true)` 表示反复读取。输入不合格时，提示后进入下一轮；输入合法或 q 时，`break` 结束最近的循环。
+
+`try/catch` 在 parseInt 失败时接住异常，给出提示，而不是让程序直接中断。只捕获预期的数字格式错误，别用“接住所有错误并继续”掩盖程序缺陷。
+
+`hasNextLine()` 处理输入流结束：如果已经没有下一行，就结束读取。`strip()` 去掉首尾空白，因此 ` 4 ` 也可被接受。
+
+请按 `四 → 9 → 4` 的顺序输入。你应分别看到解析错误、范围错误和接受结果。再运行一次输入 q，观察正常结束。
+
+::: details break、return 和 continue 分别结束什么？
+- `break`：离开最近的循环，本方法后面的代码仍可继续。
+- `return`：结束本次方法执行，有返回类型时交出结果。
+- `continue`：跳过当前轮剩余代码，进入下一轮循环。
+
+选择 while 还是 for，取决于问题：已知要预览三周，for 很自然；不知道用户会输错几次，while 更自然。两者不是不同难度等级。
+:::
+
+## 最后阅读完整版本，看看小知识怎样组合
+
+仓库里的完整版增加了称呼、天数、小时、周数校验，并支持重复计算。先从仓库根目录运行：
+
+```bash
 cd projects/java-foundations
 mvn -B -ntp test
 java -cp target/classes com.dailystudy.day003.InteractiveStudyPlanner
 ```
 
-原有 第 01 课 程序仍位于自己的包中，本课新增 第 03 课 类，便于对照固定版本与交互版本。
+如果还停在 examples 目录，先回到仓库根目录再执行，不要在错误目录继续追加路径。
 
-按提示依次输入：
+这版的规则为：称呼非空；天数 1–7；小时 0.5–6.0 且有限；周数 1–52。每个提示都接受 q 退出，计算后 y 继续、n 结束；输入流结束也会正常退出。
 
-```text
-前端开发者
-4
-2.5
-48
-n
-```
+例如输入 `小林、4、2.5、4、n`（逐行输入），会打印每周 10.00 小时、四周 40.00 小时，以及前三周预览。若只计划两周，就只显示两周。
 
-应看到：
+别一次硬读完整类。按下表找相应方法，每次回答“输入是什么、输出是什么、哪里结束”：
 
-```text
-每周学习小时：10.00
-48 周总学习小时：480.00
-符合当前节奏：保持练习、验证与复盘。
-第 1 周累计：10.00 小时
-第 2 周累计：20.00 小时
-第 3 周累计：30.00 小时
-```
-
-程序还会显示称呼、输入提示与退出文字。输入 y 再计算一轮；n 在一轮结束后退出；任何输入阶段输入 q 可取消。输入流结束也正常退出。
-
-### 输入规则
-
-| 输入 | 规则 |
+| 方法 | 看懂它负责什么 |
 |---|---|
-| 称呼 | 去掉首尾空白后不能为空 |
-| 每周天数 | 整数，1–7 |
-| 每天小时 | 有限数字，0.5–6.0，英文句点表示小数 |
-| 计划周数 | 整数，1–52 |
-| 继续选择 | y 或 n，忽略大小写；q 也能退出 |
+| `readLine` | 统一读取、去空白，识别退出 |
+| `readName` | 名称不合格就再问 |
+| `readInt` | 通用的整数解析与范围校验 |
+| `readHours` | 小数解析、有限数与范围校验 |
+| `calculateWeeklyHours` | 只负责一周时长计算 |
+| `printReport` | 负责显示与累计预览 |
+| `run` | 把整个交互按顺序组织起来 |
 
-这些范围是本课程程序的约定；学习节奏提示不等同于强制用户按某个投入学习。
-
-### 阅读完整实现时的两个辅助概念
-
-`Integer` 和 `Double` 是包装类型，此处允许读取方法返回 null 表示取消。调用方先判断是否为 null，再进入计算。本课理解这个约定即可，包装类型会在后续展开。
-
-`printf(Locale.ROOT, "%.2f", value)` 将数字按两位小数打印。Locale.ROOT 让小数点显示不随系统区域配置变化。它控制显示格式，不改变前面计算得到的值。
-
-::: details 展开完整计划器源码
+::: details 展开完整源码
 <<< @/../projects/java-foundations/src/main/java/com/dailystudy/day003/InteractiveStudyPlanner.java
 :::
 
+::: details 完整版里的 Integer、Double 和 null
+`int` 只能存整数，不能为 null；`Integer` 是包装类型，可以保存整数或 null。这里 readInt 用 null 约定“用户取消或输入结束”，不是数字 0。
 
-## 常见问题
+run 先检查 `days == null`，再交给计算方法使用。若直接把 null 转成 int，会出现 NullPointerException。Double 与 double 也有类似区别。
 
-| 现象 | 检查方向 |
-|---|---|
-| 程序显示提示后停住 | 正在等输入，输入后按 Enter |
-| 最小例子输入 abc 后抛异常 | 它假设合法数字；完整版演示解析失败恢复 |
-| 修改源码后结果未变 | 重新编译，确认运行的是 第 03 课 完整类名 |
-| 输入 2,5 不被接受 | 按程序约定使用英文句点 2.5 |
-| 8 小时进入了低投入分支 | 检查 < 与 <= 的边界 |
-| 循环输出少一周或多一周 | 检查初值、条件、递增次序 |
-| 方法打印了数字，但调用方拿不到结果 | 检查是否有匹配的返回类型与 return |
-| q 后出现 null 相关错误 | 检查是否先判断取消，再使用值或调用方法 |
+`Double.parseDouble` 还接受 NaN、Infinity，所以解析成功之后仍检查 `Double.isFinite`。这些内容不代表允许的学习小时。
 
-
-## 综合练习
-
-先独立预测并修改代码，再展开答案核对。
-
-### A. 追踪边界（必做）
-
-不运行，填写分类：
-
-| 每周小时 | 预测类别 | 实际类别 |
-|---:|---|---|
-| 7.99 | | |
-| 8.0 | | |
-| 12.0 | | |
-| 12.01 | | |
-
-在 lessons/day-003 下新建 BoundaryPractice.java，使用这个外壳，自己补齐三个分支，再依次替换 weeklyHours 验证：
-
-```java
-public class BoundaryPractice {
-    public static void main(String[] args) {
-        double weeklyHours = 7.99;
-        // 在这里补齐三类判断和输出。
-    }
-}
-```
-
-在同一目录执行 `javac -encoding UTF-8 -d out BoundaryPractice.java` 和 `java -cp out BoundaryPractice`。这是独立的边界实验，无需改变完整程序的输入范围。
-
-解释：为什么把第一个条件改成 <=8.0 会改变边界？两个独立 if 与 if/else if 的执行有何不同？
-
-::: details 展开参考解释
-7.99 低于建议投入；8.0、12.0 符合；12.01 高于。第一个条件使用 <8，所以 8 会继续进入第二个分支。
-
-独立 if 的条件都会按顺序检查，可能执行多个块；if/else if 在第一个匹配后不再检查后续分支。
+`printf` 中 `%.2f` 表示显示两位小数，`%n` 表示换行；Locale.ROOT 使格式不受电脑区域设置影响。这是显示规则，不改变底层数字。
 :::
 
-### B. 输入校验与恢复（必做）
+## 练习：自己改，而不是只运行原程序
 
-运行完整计划器，至少验证：
+### A. 预测分支边界
 
-- 天数：abc → 8 → 4。
-- 小时：NaN → 6.1 → 2.5。
-- 周数：0 → 53 → 48。
-- 正常计算后 y，再使用一组不同参数。
-- 在一个尚未完成的输入阶段输入 q。
-
-判断每一步是否进入解析、范围检查、重试或退出。无效输入不应被当成 0，也不应产生部分报表。
+每周时长分别为 7.9、8.0、12.0、12.1，三分支版本会输出什么？
 
 ::: details 展开参考解释
-abc 无法转换为整数；8 转换成功但越界；4 成功。NaN 可以被浮点解析器识别，但不是有限数；6.1 超过范围；2.5 合法。0、53 是整数但周数越界。
-
-y 开始全新一轮读取，q 取消尚未完成的输入并正常退出，不打印半份计划。完整程序也处理输入流结束。
+依次为偏低、符合、符合、偏高。特别确认 8 和 12 都包含在中间区间中。
 :::
 
-### C. 自己写方法（必做）
+### B. 修改循环
 
-在最小示例 InputBasics.java 中新增：
-
-```java
-static double calculateTotalHours(double weeklyHours, int weeks) {
-    // 由你完成。
-}
-```
-
-在 main 中调用，使用每周 10 小时、48 周，打印返回结果。然后改为每周 8 小时、10 周。
-
-你需要解释：参数来自哪里？返回值交给谁？为什么只有 println 而没有 return 不满足这个方法签名？
+把最小程序改成预览五周。若每周 10 小时，最后一行是什么？再将条件改成 `< 5`，比较结果。
 
 ::: details 展开参考解释
+用 `week <= 5`，最后是第 5 周累计 50.0；`week < 5` 则只到第 4 周 40.0。循环从 1 开始，结束条件决定哪些值能进入循环体。
+:::
+
+### C. 新增一个返回结果的方法
+
+在 InputBasics 类中新增 `calculateTotalHours(double weeklyHours, int weeks)`，main 调用它，打印四周总时长。方法只计算，不打印。
+
+::: details 展开参考解释
+把这个方法放在 main 外、类的大括号内：
+
 ```java
 static double calculateTotalHours(double weeklyHours, int weeks) {
     return weeklyHours * weeks;
 }
 ```
 
-调用示例：
+在 main 已有 weeklyHours 之后加入：
 
 ```java
-double total = calculateTotalHours(10.0, 48);
-System.out.println(total);
+double total = calculateTotalHours(weeklyHours, 4);
+System.out.println("四周共 " + total + " 小时。");
 ```
 
-得到 480.0；8.0 和 10 得到 80.0。方法要求返回 double，单独打印不会为调用方提供返回值。
+本例每周 10 小时时，总数为 40.0。打印和计算分别在调用者和方法里。
 :::
 
-### D. 循环累计（必做）
+### D. 检查退出与重试
 
-在最小示例中将预览改为 4 周，按每周 10 小时预测累计值。
-
-再加入 `int plannedWeeks = 2;`，要求预览不能超过真实计划周数。最后改成 plannedWeeks=1 和 5，验证边界。不能为了两周样例直接把循环上限永久写死为 2。
+ReadDays 依次输入空行、2.5、8、4；再分别用 q 和输入流结束试一次。解释每一步是解析失败、范围失败还是正常结束。
 
 ::: details 展开参考解释
-```java
-int plannedWeeks = 2;
-double accumulated = 0.0;
-for (int week = 1; week <= 4 && week <= plannedWeeks; week++) {
-    accumulated += weeklyHours;
-    System.out.println("第 " + week + " 周累计：" + accumulated);
-}
-```
-
-每周 10 小时时，四周为 10、20、30、40；实际计划两周时只有 10、20；一周只有 10；五周计划仍最多预览四周。
+空行和 2.5 不能解析为整数；8 能解析但超范围；4 被接受并结束循环。q 在解析之前识别，输入流结束在读取之前识别，它们都不属于数字格式错误。
 :::
 
-### E. break / continue / return（扩展）
+### E. 找出混合职责
 
-先预测下面各行输出：
-
-```java
-for (int day = 1; day <= 4; day++) {
-    if (day == 2) continue;
-    if (day == 4) break;
-    System.out.println(day);
-}
-System.out.println("结束");
-```
-
-再把 break 改成 return，预测“结束”是否仍会打印。
+有人把 `System.out.println(days * hours)` 当成 calculateWeeklyHours 的实现，却仍声明返回 double。为什么不行？
 
 ::: details 展开参考解释
-原代码依次输出 1、3、结束。day=2 跳过本轮打印；day=4 离开循环，之后继续运行循环外的打印。
-
-在 main 中把 break 改成 return，会直接结束 main，不打印“结束”。在其他方法中则结束那个方法，不代表一律结束整个程序。
+打印并没有返回 double，方法缺少 return，无法按该声明编译。计算方法应 `return days * hours`，调用者再决定怎样展示。
 :::
 
-### F. 输入不是对象引用（扩展）
+## 资料怎么配合使用
 
-说明为什么不使用 `choice == "y"` 判断用户读入的内容；给出正确写法，并说明若 choice 为 null 应先做什么。
+- [二哥的 Java 进阶之路：基本数据类型](https://github.com/itwanger/toBeBetterJavaer/blob/master/docs/src/basic-grammar/basic-data-type.md)：补充 int、double、boolean。
+- [二哥的 Java 进阶之路：流程控制](https://github.com/itwanger/toBeBetterJavaer/blob/master/docs/src/basic-grammar/flow-control.md)：对照分支与循环的例子。
+- [Java 官方学习：语言基础](https://dev.java/learn/language-basics/)：按变量、运算符、控制流选读。
+- [Java 21 Scanner 文档](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Scanner.html)：按需查 nextLine 与 hasNextLine，不必通读所有方法。
 
-Java 的 if 不能直接写 `if (days)`，请给出显式判断非零的条件。
+正文参考公开教程中“先运行例子、再逐步改变条件”的讲法，用本仓库的计算器串联知识。能独立修改规则并解释输出，比记住全部语法更重要。
 
-::: details 展开参考解释
-```java
-if (choice != null && choice.equalsIgnoreCase("y")) {
-    // 继续
-}
-```
-
-&& 会短路：choice 为 null 时不再执行右侧方法调用。字符串的 == 比较引用，输入文本应比较内容。
-
-显式非零判断为 `days != 0`。如果业务规则要求天数 1–7，还应检查完整范围，非零并不够。
-
-
-:::
-
-## 理解检查
-
-- 从终端读取一个整数和一个小数。
-- 解释文字解析失败与数值越界的区别。
-- 正确分类 8 和 12 两个边界。
-- 写 for 输出指定次数，解释初值、条件和更新。
-- 写出有退出条件的输入循环。
-- 新增一个返回计算结果的方法，并由 main 调用。
-- 完整程序输错后能重试，q 能退出。
-
-Maven 的自动测试通过说明仓库实现通过了这些检查，不自动代表你已能独立完成。本课的学习验收看自己的操作与解释。
-
-
-## 延伸阅读
-
-- [Java 官方：语言基础](https://dev.java/learn/language-basics/)：变量、运算符、控制流。
-- [Java 官方：类、对象与方法](https://dev.java/learn/classes-objects/)：本课只阅读方法相关内容。
-- [Java 21 Scanner API](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Scanner.html)：查 nextLine、hasNextLine。
-- [Java 21 Integer API](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html)：查 parseInt。
-- [B 站视频检索：Java Scanner、循环、方法](https://search.bilibili.com/all?keyword=Java%20Scanner%20%E5%BE%AA%E7%8E%AF%20%E6%96%B9%E6%B3%95)：检索入口，只补对应小节，不要求本课看完基础大课。
-
-
-## 下一层知识
-
-[第 04 课：请求链路与服务端状态](/lessons/request-lifecycle) 将程序执行、输入处理与 HTTP 交换放到同一条链路中，解释请求什么时候改变数据，以及刷新、重启与持久化的区别。
+下一课 [请求链路与服务端状态](/lessons/request-lifecycle)，把今天的输入、解析、判断和方法放回 HTTP 请求中，追踪一条笔记到底怎样被创建。

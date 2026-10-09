@@ -1,6 +1,6 @@
 # dailyStudy
 
-从前端到 AI 应用全栈的静态知识网站。Java 业务后端 → Python AI 服务 → 大模型应用 → RAG 与可靠性。
+从前端到 AI 应用全栈的静态知识网站。Java 基础 → PostgreSQL 与 Spring Boot → Python 与大模型 → RAG、Agent 与工程交付。
 
 课程集中在 `site/`：每课一页，包含原理、代码、练习、可展开答案和资料链接。提供导航、搜索、页内目录、代码高亮与复制、深浅色切换及移动端布局。
 
@@ -26,11 +26,11 @@ npm run preview
 
 | 课程 | 内容 |
 |---|---|
-| [01 · Java 工具链与程序执行](site/lessons/java-toolchain.md) | JDK/JVM、编译与运行、包、classpath、Maven 生命周期 |
-| [02 · HTTP 请求、响应与诊断](site/lessons/http.md) | 契约、方法、JSON、同源、curl、状态码与故障分层 |
-| [03 · Java 输入、控制流与方法](site/lessons/java-control-flow.md) | 解析校验、边界、短路、循环状态、方法与交互程序 |
-| [04 · 请求链路与服务端状态](site/lessons/request-lifecycle.md) | 路由、校验顺序、状态生命周期、持久化与交互式链路推演 |
-| [学习路线](site/learning-path.md) | 后续 Java、数据库、Python 与 AI 的知识依赖 |
+| [01 · Java 工具链与程序执行](site/lessons/java-toolchain.md) | 从问候与计算器理解编译、运行、JDK/JVM 和 Maven |
+| [02 · HTTP 请求、响应与诊断](site/lessons/http.md) | 从查询、创建笔记理解请求、契约与错误诊断 |
+| [03 · Java 输入、控制流与方法](site/lessons/java-control-flow.md) | 从固定计算到输入、判断、循环、方法和错误重试 |
+| [04 · 请求链路与服务端状态](site/lessons/request-lifecycle.md) | 用一条笔记解释路由、校验、刷新、重启和持久化 |
+| [学习路线](site/learning-path.md) | Java 优先，参考渡一 30 门目录并区分必修与进阶 |
 | [macOS 环境](site/setup.md) | Java/Maven/Git/Node 安装与运行 |
 
 目前有前四课完整内容，后续继续加入同一站点。
@@ -58,7 +58,7 @@ scripts/setup-cloud-java.sh 云环境工具安装
 
 ## 维护课程
 
-在 `site/lessons/` 新增 Markdown，更新 `site/.vitepress/config.mts` 导航。按“概念 → 推演 → 示例 → 误区 → 练习”组织正文，用 `::: details` 折叠答案，VitePress snippet 引用现有源码。
+在 `site/lessons/` 新增 Markdown，更新 `site/.vitepress/config.mts` 导航。按“具体问题 → 小例子 → 运行结果 → 中文解释 → 独立修改”组织正文，用 `::: details` 折叠进阶说明与答案，VitePress snippet 引用现有源码。参考公开教程时标明来源，核对版本，不复制整篇内容。
 
 发布前执行 `npm run build`，构建会检查内部链接。模型密钥和用户数据不能放进静态网站，它们会被发送给浏览器。
 

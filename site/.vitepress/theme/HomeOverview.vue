@@ -3,16 +3,16 @@ import { withBase } from 'vitepress'
 
 const courses = [
   { number: '01', topic: 'JAVA · 工具链', title: '代码如何成为一个程序',
-    description: '从源码、字节码与 JVM 开始，理解编译、运行、包与 classpath，亲手跑通 Maven 项目。',
+    description: '先打印一句问候，再改一个计算器。通过实际结果理解编译、运行、JVM 与 Maven。',
     link: '/lessons/java-toolchain', tags: ['JDK', '编译与运行', 'Maven'] },
   { number: '02', topic: 'WEB · 请求链路', title: '看懂一次 HTTP 交换',
-    description: '拆解方法、URL、请求头与正文，用浏览器和 curl 重现请求，按证据定位失败。',
+    description: '查询和创建一条学习笔记，观察请求与响应，再用三种错误理解格式、解析与校验。',
     link: '/lessons/http', tags: ['接口契约', '状态码', '错误诊断'] },
   { number: '03', topic: 'JAVA · 编程基础', title: '让程序根据输入做决定',
-    description: '掌握类型转换、条件判断、循环与方法，一步步构建可以校验和重试的交互程序。',
+    description: '从固定数字走到用户输入，逐步学会判断、循环、方法，以及输错后怎样重新读取。',
     link: '/lessons/java-control-flow', tags: ['输入校验', '控制流', '方法'] },
   { number: '04', topic: 'WEB · 服务端思维', title: '把请求与数据状态串起来',
-    description: '追踪路由、解析、校验与业务执行，理解刷新、重复请求和服务重启为什么产生不同结果。',
+    description: '跟着一条笔记从创建走到保存，亲手比较刷新、重复提交和服务重启后的数据。',
     link: '/lessons/request-lifecycle', tags: ['请求链路', '内存与持久化', '故障定位'] }
 ]
 </script>
@@ -33,7 +33,7 @@ const courses = [
     </div>
     <div class="path-strip">
       <div><p class="eyebrow">THE BIG PICTURE</p><h2>把已有前端能力，接到完整系统。</h2></div>
-      <p>Java 业务后端 <span>→</span> Python AI 服务 <span>→</span> 大模型应用 <span>→</span> RAG 与可靠性</p>
+      <p>Java 基础 <span>→</span> 数据库与 Spring Boot <span>→</span> Python 与大模型 <span>→</span> RAG、Agent 与交付</p>
       <a :href="withBase('/learning-path')">查看完整学习路线 <span aria-hidden="true">→</span></a>
     </div>
   </section>
