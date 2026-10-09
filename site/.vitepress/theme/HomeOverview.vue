@@ -1,0 +1,37 @@
+<script setup>
+import { withBase } from 'vitepress'
+
+const courses = [
+  { number: '01', topic: 'JAVA · 工具链', title: '代码如何成为一个程序',
+    description: '从源码、字节码与 JVM 开始，理解编译、运行、包与 classpath，亲手跑通 Maven 项目。',
+    link: '/lessons/java-toolchain', tags: ['JDK', '编译与运行', 'Maven'] },
+  { number: '02', topic: 'WEB · 请求链路', title: '看懂一次 HTTP 交换',
+    description: '拆解方法、URL、请求头与正文，用浏览器和 curl 重现请求，按证据定位失败。',
+    link: '/lessons/http', tags: ['接口契约', '状态码', '错误诊断'] },
+  { number: '03', topic: 'JAVA · 编程基础', title: '让程序根据输入做决定',
+    description: '掌握类型转换、条件判断、循环与方法，一步步构建可以校验和重试的交互程序。',
+    link: '/lessons/java-control-flow', tags: ['输入校验', '控制流', '方法'] }
+]
+</script>
+
+<template>
+  <section class="course-overview" aria-labelledby="courses-title">
+    <div class="section-intro">
+      <div><p class="eyebrow">THE FOUNDATION</p><h2 id="courses-title">从这里建立后端思维</h2></div>
+      <p>按顺序理解概念，再用代码检验理解。<br>讲解、示例、练习与答案，都在同一页。</p>
+    </div>
+    <div class="course-grid">
+      <a v-for="course in courses" :key="course.number" :href="withBase(course.link)" class="course-card">
+        <div class="card-top"><span class="course-number">{{ course.number }}</span><span class="course-topic">{{ course.topic }}</span></div>
+        <h3>{{ course.title }}</h3><p>{{ course.description }}</p>
+        <div class="course-tags"><span v-for="tag in course.tags" :key="tag">{{ tag }}</span></div>
+        <div class="card-link">阅读这一课 <span aria-hidden="true">↗</span></div>
+      </a>
+    </div>
+    <div class="path-strip">
+      <div><p class="eyebrow">THE BIG PICTURE</p><h2>把已有前端能力，接到完整系统。</h2></div>
+      <p>Java 业务后端 <span>→</span> Python AI 服务 <span>→</span> 大模型应用 <span>→</span> RAG 与可靠性</p>
+      <a :href="withBase('/learning-path')">查看完整学习路线 <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</template>

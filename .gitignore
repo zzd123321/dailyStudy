@@ -12,3 +12,6 @@ Thumbs.db
 .venv/
 __pycache__/
 *.log
+node_modules/
+site/.vitepress/dist/
+site/.vitepress/cache/

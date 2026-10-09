@@ -1,102 +1,83 @@
-# dailyStudy：从前端到 AI 应用全栈
+# dailyStudy
 
-学习者背景：三年前端经验，Java/Python 基础薄弱；每周四次，每次两到三小时；本地学习使用 macOS。
+从前端到 AI 应用全栈的静态知识网站。Java 业务后端 → Python AI 服务 → 大模型应用 → RAG 与可靠性。
 
-主线：Java 业务后端 → Python AI 服务 → 大模型 API → RAG 与工具调用 → 部署与求职项目。以约 48 个学习周推进，并预留补课和返工时间。
+课程集中在 `site/`：每课一页，包含原理、代码、练习、可展开答案和资料链接。提供导航、搜索、页内目录、代码高亮与复制、深浅色切换及移动端布局。
 
-## 从这里开始
+## 本地启动
 
-| 入口 | 内容 |
+Node.js 22+，在仓库根目录执行：
+
+```bash
+npm ci
+npm run dev
+```
+
+打开终端显示的地址，通常为 **http://localhost:5173/dailyStudy/**。
+
+```bash
+npm run build
+npm run preview
+```
+
+生产预览通常为 **http://localhost:4173/dailyStudy/**。静态产物在 `site/.vitepress/dist/`，可部署到静态托管；直接双击 HTML 不等同于通过 HTTP 预览。
+
+## 课程与源码
+
+| 课程 | 内容 |
 |---|---|
-| [Day 001 完整课程](lessons/day-001/README.md) | Java 工具链、编译运行、学习时长计算器、Maven、练习与验收 |
-| [Day 001 练习](lessons/day-001/exercises.md) | 先预测、再运行、解释差异 |
-| [Day 002 完整课程](lessons/day-002/README.md) | HTTP、Network、curl、本地实验与错误诊断 |
-| [Day 002 练习与观察模板](lessons/day-002/exercises.md) | 重现请求，记录成功与失败 |
-| [Day 003 完整课程](lessons/day-003/README.md) | Java 输入、判断、循环、方法与交互式计算器 |
-| [Day 003 练习](lessons/day-003/exercises.md) | 边界预测、校验恢复、自己写方法与循环 |
-| [学习进度](docs/progress.md) | 区分课程提供与用户实际完成 |
-| [每日安排](docs/daily-schedule.md) | 192 次学习的计划；标出已提供完整课程的日期 |
-| [完整路线](docs/roadmap.md) | 阶段目标、验收和资料 |
-| [macOS 环境与学习工作流](docs/cross-platform-workflow.md) | macOS 的安装、Git 同步、编码与常见错误 |
-| [学习记录模板](docs/learning-log-template.md) | 记录实际学习结果，便于下一次接着学 |
-| [课程验证记录](docs/day-001-validation.md) | 云环境实际运行结果与本地验证边界 |
-| [Day 002 验证记录](docs/day-002-validation.md) | 接口测试、curl、服务停止与重启结果 |
-| [Day 003 验证记录](docs/day-003-validation.md) | 交互输入、错误恢复、方法与循环测试 |
+| [01 · Java 工具链与程序执行](site/lessons/java-toolchain.md) | JDK/JVM、编译与运行、包、classpath、Maven 生命周期 |
+| [02 · HTTP 请求、响应与诊断](site/lessons/http.md) | 契约、方法、JSON、同源、curl、状态码与故障分层 |
+| [03 · Java 输入、控制流与方法](site/lessons/java-control-flow.md) | 解析校验、边界、短路、循环状态、方法与交互程序 |
+| [学习路线](site/learning-path.md) | 后续 Java、数据库、Python 与 AI 的知识依赖 |
+| [macOS 环境](site/setup.md) | Java/Maven/Git/Node 安装与运行 |
 
-Day 表示一次学习，不是连续的自然日。按照每周四次的节奏，Day 001–004 对应第 1 周，Day 005–008 对应第 2 周。
-
-**目前已提供完整教学内容的是 Day 001–003。** 用户已确认完成 Day 001–002，当前学习 Day 003。其余 189 次已有计划，课程会围绕当天产出依次展开。仓库提供代码和验证结果，不代表学习者已经掌握。
-
-## 项目组织
+目前有前三课完整内容，后续继续加入同一站点。
 
 ```text
-docs/                         路线、每日安排、同步说明
-lessons/day-001/               Java 工具链课程、示例、练习、参考答案
-lessons/day-002/               HTTP 课程、练习、观察模板、参考答案
-lessons/day-003/               Java 控制流课程、最小示例、练习、参考答案
-projects/java-foundations/    从 Java 小程序开始积累的项目代码
-projects/http-playground/    Day 002 的本地 HTTP 实验服务和页面
-notes/                        你自己的学习记录
-scripts/setup-cloud-java.sh  Linux x64 云环境工具安装脚本
+site/                         每课一份 Markdown
+site/.vitepress/              导航、搜索、主题与构建配置
+lessons/day-001/examples/     第 01 课最小 Java 示例
+lessons/day-003/examples/     第 03 课最小 Java 示例
+projects/java-foundations/   固定计算器与交互式计划器
+projects/http-playground/    HTTP 本地实验服务
+.github/workflows/pages.yml  静态构建与发布
+scripts/setup-cloud-java.sh 云环境工具安装
 ```
 
-Day 001 的示例和项目不依赖模型 API、数据库或收费服务。后续通过阶段验收后再添加依赖。
+旧版拆开的课程、练习、答案、学习记录模板和每日日程已合并或移除，原内容可从 Git 历史查看。Java 示例路径保持可用。
 
-## 本地快速开始
+## GitHub Pages 发布
 
-先按 [macOS 安装说明](docs/cross-platform-workflow.md) 安装 Java 21 **JDK**、Maven 和 Git。终端确认 `java -version`、`javac -version`、`mvn -version` 正常。
+工作流已配置。首次启用时，在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**，然后在 **Actions → Deploy knowledge site → Run workflow** 运行一次。
 
-```shell
-git clone https://github.com/zzd123321/dailyStudy.git
-cd dailyStudy
-cd lessons/day-001
-javac -encoding UTF-8 -d out examples/HelloStudy.java
-java -cp out HelloStudy
-```
+后续 main 分支的网站更新会自动构建并发布。成功后的地址为 **https://zzd123321.github.io/dailyStudy/**，是否可用以 Actions 部署结果为准；配置不代表已经启用 Pages。
 
-再从仓库根目录执行：
+当前 base 为 `/dailyStudy/`。部署到自定义域名根目录时，把 `site/.vitepress/config.mts` 的 base 改为 `/`，并调整 favicon 路径。
 
-```shell
-cd projects/java-foundations
-mvn -B -ntp compile
-java -cp target/classes com.dailystudy.day001.LearningBudget
-```
+## 维护课程
 
-这些命令在 macOS 终端执行。路径使用 `/`；不要把命令行提示符复制进去。完整解释见课程。
+在 `site/lessons/` 新增 Markdown，更新 `site/.vitepress/config.mts` 导航。按“概念 → 推演 → 示例 → 误区 → 练习”组织正文，用 `::: details` 折叠答案，VitePress snippet 引用现有源码。
 
-## 云环境快速开始
+发布前执行 `npm run build`，构建会检查内部链接。模型密钥和用户数据不能放进静态网站，它们会被发送给浏览器。
 
-云环境里使用现有 `/workspace/dailyStudy` 检出，无需新建 Git worktree。
+## 云环境
+
+使用现有检出，npm 缓存放在工作区：
 
 ```bash
 cd /workspace/dailyStudy
+npm ci --cache /workspace/.npm-cache
+npm run build
+```
+
+需要验证 Java 示例时：
+
+```bash
 bash scripts/setup-cloud-java.sh
 source /workspace/.dailystudy-tools/env.sh
 cd projects/java-foundations
-mvn -B -ntp compile
-java -cp target/classes com.dailystudy.day001.LearningBudget
+mvn -B -ntp test
 ```
 
-云环境脚本只支持 Linux x86_64，使用官方 JDK/Maven 下载地址并验证 SHA-256/SHA-512。工具和 Maven 缓存存放在 `/workspace/.dailystudy-tools`，不进入项目仓库。它在本机生成 Maven 代理设置，复用平台提供的系统 Java 信任库，不关闭 TLS 验证。macOS 本地安装按上面的说明操作。
-
-## Day 002：HTTP 实验
-
-在 Mac 的仓库根目录执行：
-
-```bash
-cd projects/http-playground
-mvn -B -ntp test dependency:copy-dependencies
-java -cp 'target/classes:target/dependency/*' com.dailystudy.day002.HttpPlayground
-```
-
-保持服务终端运行，用第二个终端执行课程中的 curl。Mac 本地浏览器地址栏输入 `http://127.0.0.1:8082` 观察 Network；这是本地教学地址，云环境回环地址不等于 Mac 的地址。
-
-数据仅在内存中，重启会清空；按 Ctrl+C 停止。没有登录或数据库，供本地 HTTP 实验使用。详细步骤见 [Day 002](lessons/day-002/README.md)。云环境运行前先激活 `/workspace/.dailystudy-tools/env.sh`。
-
-## 怎么判断今天学会了
-
-Day 003 从仓库根目录进入 projects/java-foundations，执行 `mvn -B -ntp test`，再运行 `java -cp target/classes com.dailystudy.day003.InteractiveStudyPlanner`。按提示输入称呼、天数、每天小时、周数，输入 y 再计算，n 或 q 退出。详细讲解见 [第 3 天](lessons/day-003/README.md)。
-
-完成课程后的闭卷小练习、解释题和验收清单，再把实际结果记入 `notes/`。遇到问题，记录执行目录、命令、完整错误、预期与实际结果；后续课程据此补缺。
-
-不要把 API 密钥、密码或真实凭据放入学习记录。模型功能出现之前不需要配置这些信息。
+Linux 安装脚本保留官方下载校验、平台代理和系统证书信任。Mac 使用网站里的安装说明。
