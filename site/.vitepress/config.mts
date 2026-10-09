@@ -26,7 +26,8 @@ export default defineConfig({
         { text: '04 · 请求链路与服务端状态', link: '/lessons/request-lifecycle' }
       ] },
       { text: 'Java 篇 · 从语法走向业务', items: [
-        { text: '05 · Java 类、对象与封装', link: '/lessons/java-objects' }
+        { text: '05 · Java 类、对象与封装', link: '/lessons/java-objects' },
+        { text: '06 · 对象协作、继承与接口', link: '/lessons/java-collaboration' }
       ] }
     ],
     outline: { level: [2, 3], label: '本页内容' },

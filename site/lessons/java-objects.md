@@ -573,4 +573,4 @@ public boolean canRename() {
 - [Java 官方：类与对象](https://dev.java/learn/classes-objects/)：按类声明、字段、构造器与方法选读。
 - [Java 21 Object 文档](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html)：按需查 toString 与 equals，后续再展开 hashCode。
 
-下一课继续**对象协作、继承与接口**：多个类如何分工，哪些行为应该由统一接口表达，什么时候组合比继承更合适。之后再学习集合，把一条任务扩展成多条任务管理。完整顺序见 [学习路线](/learning-path)。
+下一课继续 [06 · 对象协作、继承与接口](/lessons/java-collaboration)：多个类如何分工，哪些行为应该由统一接口表达，什么时候组合比继承更合适。之后再学习集合，把一条任务扩展成多条任务管理。完整顺序见 [学习路线](/learning-path)。

@@ -16,7 +16,10 @@ const courses = [
     link: '/lessons/request-lifecycle', tags: ['请求链路', '内存与持久化', '故障定位'] },
   { number: '05', topic: 'JAVA · 业务对象', title: '让对象维护自己的规则',
     description: '从两条任务理解实例、构造器和封装，用改名、完成与重新打开串联状态、引用和 static。',
-    link: '/lessons/java-objects', tags: ['类与对象', '封装与状态', '引用传递'] }
+    link: '/lessons/java-objects', tags: ['类与对象', '封装与状态', '引用传递'] },
+  { number: '06', topic: 'JAVA · 对象协作', title: '让多个对象各负其责',
+    description: '为同一批任务生成两种清单，串联接口、多态与继承，理解构造器传入依赖和组合的用途。',
+    link: '/lessons/java-collaboration', tags: ['接口与多态', '继承与抽象类', '组合与分工'] }
 ]
 </script>
 
