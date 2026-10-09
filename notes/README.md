@@ -17,3 +17,9 @@ cp lessons/day-002/worksheet.md notes/day-002.md
 ```
 
 填写实际请求、响应和失败原因。后续课程按学习日使用对应模板或通用模板。
+
+Day 003 的输入、分支、循环和方法练习记录：
+
+```bash
+cp lessons/day-003/worksheet.md notes/day-003.md
+```
