@@ -25,7 +25,7 @@ description: 以大学 Java MOOC、Java 官方教材和中文开源教程为参�
 
 ## 已有内容的阅读顺序
 
-原来的顺序在 Java 语法之间插入了 HTTP，现在改为四篇连续的 Java 基础，以及两篇 Web 专题。**页面地址和已有示例源码路径保持可用，正文编号按新目录调整。** 已经学过的部分可以直接复习，不需要重新做一遍。
+原来的顺序在 Java 语法之间插入了 HTTP，现在改为连续的 Java 基础，以及单独的 Web 专题。**页面地址和已有示例源码路径保持可用，正文编号按新目录调整。** 已经学过的部分可以直接复习，不需要重新做一遍。
 
 | 新目录 | 内容 | 对应旧课 |
 |---|---|---|
@@ -33,19 +33,20 @@ description: 以大学 Java MOOC、Java 官方教材和中文开源教程为参�
 | [Java 02：基本语法、数组与方法](/lessons/java-control-flow) | 类型、运算、字符串、分支、循环、数组、参数与返回值 | 旧 03 |
 | [Java 03：类、对象与封装](/lessons/java-objects) | 字段、构造器、实例方法、引用、static 与状态修改 | 旧 05 |
 | [Java 04：继承、接口与多态](/lessons/java-collaboration) | extends、super、重写、抽象类、implements、组合 | 旧 06 |
+| [Java 05：集合与任务管理](/lessons/java-collections) | List、Set、Map、过滤、删除与集合复制 | 新增 |
 | [Web A：HTTP 请求与响应](/lessons/http) | 用 curl 和 Network 观察请求，处理 JSON 与错误 | 旧 02 |
 | [Web B：请求处理与数据保存](/lessons/request-lifecycle) | 服务进程、路由、校验、内存与文件 | 旧 04 |
 
-Java 01–04 按顺序阅读。Web A、B 可以在开始 Spring Boot 前阅读；它们不作为学习 Java 对象的前置条件。
+Java 01–05 按顺序阅读。Web A、B 可以在开始 Spring Boot 前阅读；它们不作为学习 Java 对象的前置条件。
 
 ## 第一阶段：Java 基础
 
-已发布的是前四章，后面的主题会继续加入同一网站。下面是后续章节顺序，不代表正文已经发布。
+已发布的是前五章，后面的主题会继续加入同一网站。下面包含已有章节与后续顺序，06 起的正文尚未发布。
 
 | 顺序 | 主要内容 | 要写出的代码 |
 |---|---|---|
 | 01–04 | 程序、语法、对象、继承与接口 | 能创建任务，修改状态，使用不同格式显示它 |
-| 05 | List、ArrayList、Set、Map、HashMap；遍历与查找 | 添加、查询、完成、删除多条任务 |
+| [05](/lessons/java-collections) | List、ArrayList、Set、Map、HashMap、LinkedHashMap；遍历与查找 | 添加、查询、完成、删除多条任务 |
 | 06 | 泛型、包装类型、equals 与 hashCode | 正确使用集合，解释对象相等与重复元素 |
 | 07 | 异常、调用栈、try/catch、异常传播 | 区分错误输入、业务失败和程序缺陷 |
 | 08 | Path、Files、字符编码、JSON、资源关闭 | 保存任务，退出后重新读取 |

@@ -23,7 +23,8 @@ export default defineConfig({
         { text: '01 · 程序结构、编译与运行', link: '/lessons/java-toolchain' },
         { text: '02 · 基本语法、数组与方法', link: '/lessons/java-control-flow' },
         { text: '03 · 类、对象与封装', link: '/lessons/java-objects' },
-        { text: '04 · 继承、接口与多态', link: '/lessons/java-collaboration' }
+        { text: '04 · 继承、接口与多态', link: '/lessons/java-collaboration' },
+        { text: '05 · 集合与任务管理', link: '/lessons/java-collections' }
       ] },
       { text: 'Web 基础专题', items: [
         { text: 'A · HTTP 请求与响应', link: '/lessons/http' },

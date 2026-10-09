@@ -14,6 +14,9 @@ const courses = [
   { number: '04', topic: 'JAVA 基础', title: '继承、接口与多态',
     description: '从员工与消息输出的小程序理解 super、重写和接口，再应用到任务清单。',
     link: '/lessons/java-collaboration', tags: ['继承与重写', '接口与多态', '组合'] },
+  { number: '05', topic: 'JAVA 基础', title: '集合与任务管理',
+    description: '学习 List、Set 与 Map，按 ID 新增、查询、完成和删除任务，区分集合复制与对象引用。',
+    link: '/lessons/java-collections', tags: ['List / Set / Map', '任务管理', '集合复制'] },
   { number: 'A', topic: 'WEB 专题', title: 'HTTP 请求与响应',
     description: '查询和创建笔记，观察方法、URL、头与正文，练习状态检查和 Fetch 错误处理。',
     link: '/lessons/http', tags: ['HTTP 消息', '状态码', 'Fetch'] },
@@ -27,7 +30,7 @@ const courses = [
   <section class="course-overview" aria-labelledby="courses-title">
     <div class="section-intro">
       <div><p class="eyebrow">CONTENTS</p><h2 id="courses-title">课程目录</h2></div>
-      <p>先读 Java 01–04，Web 内容单独阅读。<br>每篇包含讲解、代码、练习和参考教材。</p>
+      <p>先读 Java 01–05，Web 内容单独阅读。<br>每篇包含讲解、代码、练习和参考教材。</p>
     </div>
     <div class="course-grid">
       <a v-for="course in courses" :key="course.number" :href="withBase(course.link)" class="course-card">

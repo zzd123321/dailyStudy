@@ -412,4 +412,4 @@ class IdFormatter implements TaskFormatter {
 - [MOOC：Interfaces](https://github.com/rage/java-programming/blob/master/data/part-9/2-interfaces.md)：接口类型作为变量、参数和返回值。
 - [Javaer：继承与多态](https://github.com/itwanger/toBeBetterJavaer/blob/master/docs/src/oo/encapsulation-inheritance-polymorphism.md)、[接口](https://github.com/itwanger/toBeBetterJavaer/blob/master/docs/src/oo/interface.md)：补充中文解释。
 
-下一章学习集合：用 List 管理多条任务，用 Map 根据 ID 查询。完整顺序见[学习路线](/learning-path)。
+[下一章：集合与任务管理](/lessons/java-collections)，用 List 处理结果，用 Map 根据 ID 管理多条任务。完整顺序见[学习路线](/learning-path)。
