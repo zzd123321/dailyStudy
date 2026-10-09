@@ -16,7 +16,7 @@ description: 把固定数字改成用户输入，通过学习时长计算器学�
 
 <<< @/../lessons/day-003/examples/InputBasics.java
 
-从 Mac 的仓库根目录执行：
+从仓库根目录执行：
 
 ```bash
 cd lessons/day-003/examples
@@ -87,6 +87,77 @@ Scanner input = new Scanner(System.in, StandardCharsets.UTF_8);
 浮点数也不能精确表示所有十进制小数，例如 0.1。当前时长估算使用 double 足够；金额等需要明确精度与舍入规则时，会学习 BigDecimal。
 :::
 
+## 计算规则：为什么 10 / 4 得不到 2.5
+
+先在 main 内试三个表达式：
+
+```java
+System.out.println(10 / 4);       // 2
+System.out.println(10 / 4.0);     // 2.5
+double average = 10 / 4;
+System.out.println(average);      // 2.0
+```
+
+第三个结果最值得注意：右边先按两个整数计算，得到 2，再放进 double 成为 2.0。**接收变量是 double，不会让已经发生的整数除法重新计算。**
+
+整数除法向零截断。要计算平均值，可以让一个操作数先成为 double：
+
+```java
+int totalHours = 10;
+int days = 4;
+double average = (double) totalHours / days;
+```
+
+`(double)` 是显式类型转换。它与 `Double.parseDouble("2.5")` 不同：前者转换已有数值，后者解析文本。
+
+### 取余、累计和优先级
+
+`%` 得到余数，可以判断每三周是否安排一次阶段检查。以下是循环内可用的片段：
+
+```java
+if (week % 3 == 0) {
+    System.out.println("本周安排阶段检查。");
+}
+```
+
+`accumulated += weeklyHours` 在当前 double 变量上表示“把一周时长加到累计值”；`week++` 则把 week 加一。尽量单独写更新语句，不把多次自增塞进一个表达式。
+
+乘除先于加减，比较先于 `&&`、`||` 中的组合。复杂条件用括号说明分组，比要求读者背优先级表更清楚：
+
+```java
+boolean inRange = (days >= 1 && days <= 7);
+boolean needsAdjustment = (weeklyHours < 8.0 || weeklyHours > 12.0);
+```
+
+int 也有范围限制：它不是无限精度整数，过大的运算可能溢出；double 也有浮点舍入。普通学习时长够用，但记录金额、巨大 ID 或精确统计时，需要按业务选择类型。
+
+## 字符串处理：去空白、比较和检查长度
+
+读取名字后，常见处理是：
+
+```java
+String rawName = "  小林  ";
+String name = rawName.strip();
+System.out.println(rawName); // 仍含首尾空白。
+System.out.println(name);    // 小林。
+System.out.println(name.isEmpty()); // false。
+```
+
+String 的内容不可变。strip 返回处理后的字符串，不会就地改掉 rawName。后续 `text = text.strip()` 是把变量改为指向处理结果，不是修改原字符串内容。
+
+| 方法 | 适合解决的问题 |
+|---|---|
+| `strip()` | 去掉首尾空白 |
+| `isEmpty()` | 长度是否为 0 |
+| `isBlank()` | 是否为空或全是空白 |
+| `equals(...)` | 内容相同吗 |
+| `equalsIgnoreCase(...)` | 忽略大小写后相同吗 |
+| `length()` | UTF-16 单元数量 |
+
+`"   ".isEmpty()` 是 false，`"   ".isBlank()` 是 true。它们检查的规则不同；去空白后再检查非空，是另一种表达同一业务要求的方式。
+
+第 02 课标题上限按 Unicode 码点计算，不能把 String.length 无条件当成用户眼中的字符数量。例如 emoji 可能占两个 UTF-16 单元。当前先记住“判断长度要明确计数规则”。
+
 ## if：程序怎样根据数字作决定
 
 现在已经算出 `weeklyHours`，例如 10.0：
@@ -131,6 +202,48 @@ if (weeklyHours < 8.0) {
 想让 q 和 Q 都能退出，可用 `text.equalsIgnoreCase("q")`。调用方法前还要知道 text 是否可能为 null，后面的完整程序会处理这一点。
 :::
 
+### 短路判断：左边不满足，右边就不再执行
+
+假设 text 可能为 null：
+
+```java
+String text = null;
+if (text != null && !text.isBlank()) {
+    System.out.println(text);
+}
+```
+
+`&&` 左边已经是 false，就不会继续调用右边的方法。这叫短路，能避免在 null 上调用 isBlank。
+
+也可以把无效条件写在一起：
+
+```java
+if (text == null || text.isBlank()) {
+    System.out.println("没有可用文本。");
+}
+```
+
+`||` 左边已经为 true，右边也不需要执行。顺序不能随便换；先调用 text.isBlank，再判断 null，保护就失效了。
+
+布尔运算中的 `&`、`|` 不使用同样的短路规则，不要把它们当作 `&&`、`||` 的简写。
+
+### 离散选项用 switch，数值区间继续用 if
+
+用户输入的是 y、n 或其他固定选项时，可以用 switch。下面是 Java 21 可用的语句片段，放在 main 内：
+
+```java
+String choice = "y";
+switch (choice) {
+    case "y", "Y" -> System.out.println("继续计算。");
+    case "n", "N" -> System.out.println("结束计算。");
+    default -> System.out.println("请输入 y 或 n。");
+}
+```
+
+箭头写法不会自动接着执行下一个分支。每周时长低于 8、介于 8 与 12、超过 12，则更适合用 if 表达区间。
+
+先根据问题选表达方式，而不是为了使用新语法，把原本清楚的逻辑改复杂。本段假设 choice 非 null，完整输入处理仍要先检查取消或输入结束。
+
 ## for：重复做一件事，但每次周数不同
 
 不必手写三条打印语句：
@@ -159,6 +272,49 @@ for (int week = 1; week <= 3; week++) {
 注意不是“跑完第三次就自动停”，而是下一次条件检查不成立才停。把 `<= 3` 改为 `< 3`，就只打印前两周。
 
 本例直接用 `week * weeklyHours` 算累计。也可以用一个变量每次加一周时长，两者在每周时长固定时得到相同结果。
+
+## 数组：把多次学习时长放到一起处理
+
+之前每周时长都一样，所以直接相乘。现在四次学习分别是 2.0、2.5、3.0、2.5 小时，需要保存一组数据：
+
+```java
+double[] hours = {2.0, 2.5, 3.0, 2.5};
+System.out.println(hours[0]);     // 2.0，第一项。
+System.out.println(hours.length); // 4，元素数量。
+```
+
+`double[]` 表示 double 数组。下标从 0 到 length-1；本例最后一项是 hours[3]，访问 hours[4] 会越界。
+
+Java 数组创建后长度固定，不能直接像 JavaScript 数组一样 push。后面集合课会引入 ArrayList，处理可变数量的业务对象。
+
+### 用下标循环求总和
+
+```java
+double total = 0.0;
+for (int index = 0; index < hours.length; index++) {
+    total += hours[index];
+}
+System.out.println(total); // 10.0。
+```
+
+这个循环从 0 开始，因此结束条件是 `< hours.length`，不能写 `<=`。每轮读取一项，加进 total。
+
+第一次 total 是 2.0，第二次 4.5，第三次 7.5，最后 10.0。把每轮变量写出来，是检查循环逻辑最直接的方法。
+
+### 只需要元素时，用增强 for
+
+同样的求和也可以写成：
+
+```java
+double total = 0.0;
+for (double value : hours) {
+    total += value;
+}
+```
+
+用中文读成“对 hours 中的每个值”。它适合只关心元素、不需要下标的遍历；需要显示“第几次”、按位置更新或访问邻项时，下标循环更合适。
+
+把数组交给方法，方法就能处理任意数量的时长。一个常见错误是直接打印数组变量，得到类似 `[D@...` 的信息；要展示内容，遍历元素或使用 `Arrays.toString(hours)`。后者需导入 `java.util.Arrays`。
 
 ## 方法：给一段计算起名字
 
@@ -216,6 +372,58 @@ main 中的 result 是局部变量；twice 中的 value 是该方法的参数。
 
 参数名与调用者的变量名不必相同，传递的是值。现在先用基本类型理解，之后对象课再展开引用值的传递。
 :::
+
+### 一个方法调用另一个方法：沿着结果推演
+
+方法不只由 main 调用。下面两个定义应放在类内部、main 外部：
+
+```java
+static double sum(double[] hours) {
+    double total = 0.0;
+    for (double value : hours) {
+        total += value;
+    }
+    return total;
+}
+
+static double average(double[] hours) {
+    if (hours.length == 0) {
+        throw new IllegalArgumentException("至少需要一次学习时长");
+    }
+    return sum(hours) / hours.length;
+}
+```
+
+调用 average 时，先检查长度，再调用 sum，sum 的结果返回后再做除法。这里总和已经是 double，所以不是前面的整数除法。
+
+空数组求和为 0 很自然，但平均值没有分母，规则应明确拒绝。`throw` 主动抛出异常，停止这次正常计算；后面会用 catch 接住预期错误。这个开头先排除无效情况的写法叫提前校验或守卫条件，能减少后面嵌套。
+
+以上方法约定数组非 null、元素已经校验；它们不自动把任何外部输入都变成可信数据。
+
+### 基本类型参数：方法内改了，不会改掉调用者的变量
+
+以下是完整小程序：
+
+```java
+public class ValueDemo {
+    public static void main(String[] args) {
+        int days = 4;
+        increase(days);
+        System.out.println(days); // 4。
+    }
+
+    static void increase(int value) {
+        value++;
+        System.out.println(value); // 5。
+    }
+}
+```
+
+参数 value 得到的是数值 4 的副本。改它不等于改 main 的 days；想让调用处拿到新结果，通常让方法返回，再赋值。
+
+Java 都是按值传递。数组和对象会传递引用值的副本，方法通过该引用修改同一个数组元素时，调用者可看到修改；把参数重新指向另一数组则不等于重新赋值调用者变量。对象课会继续用实例解释。
+
+方法可以同名但参数列表不同，这叫重载；仅仅把返回类型从 int 改成 double，不足以构成两个重载方法。现在先把方法名、参数与返回值写清楚，不必为每次计算设计一堆重载。
 
 ## 错误输入：读得懂，不等于允许使用
 
@@ -327,6 +535,118 @@ run 先检查 `days == null`，再交给计算方法使用。若直接把 null �
 `printf` 中 `%.2f` 表示显示两位小数，`%n` 表示换行；Locale.ROOT 使格式不受电脑区域设置影响。这是显示规则，不改变底层数字。
 :::
 
+## 综合实践：统计一组真实学习时长
+
+把前面的知识组合起来，写一个可以接收任意多条小时数的程序。它不是新的学习记录功能，只是本课的数组与方法练习。
+
+输入要求：每项为 0–6 的有限数字，0 表示没有学习；没有命令行参数时使用示例数组。输出总时长、平均时长，以及达到 2.5 小时的次数。
+
+把以下完整源码保存为练习目录中的 `StudyReport.java`：
+
+```java
+import java.util.Locale;
+
+public class StudyReport {
+    public static void main(String[] args) {
+        String[] texts = args.length == 0
+                ? new String[]{"2.0", "2.5", "3.0", "2.5"}
+                : args;
+        try {
+            double[] hours = parseHours(texts);
+            System.out.printf(Locale.ROOT, "总时长：%.2f%n", sum(hours));
+            System.out.printf(Locale.ROOT, "平均时长：%.2f%n", average(hours));
+            System.out.println("达到 2.5 小时的次数：" + countAtLeast(hours, 2.5));
+        } catch (IllegalArgumentException error) {
+            System.out.println("输入不合格：" + error.getMessage());
+        }
+    }
+
+    static double[] parseHours(String[] texts) {
+        double[] values = new double[texts.length];
+        for (int i = 0; i < texts.length; i++) {
+            double value = Double.parseDouble(texts[i]);
+            if (!Double.isFinite(value) || value < 0.0 || value > 6.0) {
+                throw new IllegalArgumentException("小时须为 0–6 的有限数字");
+            }
+            values[i] = value;
+        }
+        return values;
+    }
+
+    static double sum(double[] hours) {
+        double total = 0.0;
+        for (double value : hours) total += value;
+        return total;
+    }
+
+    static double average(double[] hours) {
+        if (hours.length == 0) {
+            throw new IllegalArgumentException("至少需要一次学习时长");
+        }
+        return sum(hours) / hours.length;
+    }
+
+    static int countAtLeast(double[] hours, double target) {
+        int count = 0;
+        for (double value : hours) {
+            if (value >= target) count++;
+        }
+        return count;
+    }
+}
+```
+
+从保存该文件的目录执行：
+
+```bash
+mkdir -p out
+javac -encoding UTF-8 -d out StudyReport.java
+java -cp out StudyReport
+java -cp out StudyReport 1 2 3
+java -cp out StudyReport 0
+java -cp out StudyReport 四
+java -cp out StudyReport -1
+java -cp out StudyReport NaN
+```
+
+默认结果是 10.00、2.50、3 次。`1 2 3` 得到 6.00、2.00、1 次。0 是合法记录，其他三个非法输入则给出提示，不输出统计结果。
+
+这里新出现的 `条件 ? 值一 : 值二` 是三元表达式：条件成立选择值一，否则选择值二。`new double[n]` 创建 n 个元素的数组，初始值都是 0.0；之后循环逐项填入。
+
+### 为什么把读取、校验、统计拆开
+
+parseHours 处理不可信文本；sum、average、countAtLeast 处理已经合格的数字；main 组织调用和显示。以后从 HTTP 或文件接收输入，可以复用统计方法，不必把它们全部重写。
+
+这是方法拆分的真正用途：**职责稳定时，让输入来源和显示方式可以改变**。不是看到十行代码就机械拆成十个方法。
+
+NumberFormatException 是 IllegalArgumentException 的子类，所以这里的 catch 也会接住数字格式错误。它们的继承关系下一课再展开，当前只理解这个明确的输入边界。
+
+### 进一步改三件事
+
+1. 新增 maximum，返回最长一次时长；空数组应该怎样处理？
+2. 新增 countBelow，统计低于目标的次数；0 是否计入？
+3. 把命令行数组改为已有 Scanner 交互输入，统计函数是否需要改变？
+
+::: details 思路与边界
+maximum 可先排除空数组，再从第一项开始作为当前最大值，逐项比较更新。不要无条件用 0 当所有业务的最大值初始值，那会在允许负数的其他问题中出错。
+
+countBelow 逐项判断 `< target`；按本题定义，0 是一次合法记录，也应计入。若改成“有学习的次数”，条件应改为 `value > 0`，业务规则不同。
+
+改输入来源时，只改收集与转换数字的部分，统计方法可以继续复用。先保持规则一致，再验证正常与非法输入。
+:::
+
+## 从报错和断点中理解执行顺序
+
+读异常时，先找异常类型与消息，再找第一条属于自己源码的调用位置。例如 parseDouble 出错后，调用栈会带你回到 parseHours，再回到 main。不要被上面的所有库内部行淹没。
+
+用编辑器的 Java 调试功能，在 parseHours 的循环内下断点，以调试方式运行，观察 i、texts[i]、value；再在 sum 中观察 total。单步执行可以亲眼看到变量怎样改变。
+
+- Step over：执行当前行，调用的方法通常整体完成。
+- Step into：进入当前行调用的方法内部。
+- Step out：完成当前方法，回到调用者。
+
+如果停在读取键盘的行，程序仍可能需要你输入，不一定是“调试卡住”。循环越界、分支顺序和返回值错误，都适合用少量断点验证；这项能力会延续到 Spring Boot 与 AI 服务。
+
 ## 练习：自己改，而不是只运行原程序
 
 ### A. 预测分支边界
@@ -388,6 +708,9 @@ ReadDays 依次输入空行、2.5、8、4；再分别用 q 和输入流结束试
 
 - [二哥的 Java 进阶之路：基本数据类型](https://github.com/itwanger/toBeBetterJavaer/blob/master/docs/src/basic-grammar/basic-data-type.md)：补充 int、double、boolean。
 - [二哥的 Java 进阶之路：流程控制](https://github.com/itwanger/toBeBetterJavaer/blob/master/docs/src/basic-grammar/flow-control.md)：对照分支与循环的例子。
+- [Javaer：运算符](https://github.com/itwanger/toBeBetterJavaer/blob/master/docs/src/basic-grammar/operator.md)：重点读整数除法、取余和短路判断。
+- [Javaer：数组](https://github.com/itwanger/toBeBetterJavaer/blob/master/docs/src/array/array.md)：重点读创建、下标、遍历；ArrayList 等后续再学。
+- [Javaer：方法](https://github.com/itwanger/toBeBetterJavaer/blob/master/docs/src/oo/method.md)：当前先读方法声明、调用与返回，实例方法和继承部分下课衔接。
 - [Java 官方学习：语言基础](https://dev.java/learn/language-basics/)：按变量、运算符、控制流选读。
 - [Java 21 Scanner 文档](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Scanner.html)：按需查 nextLine 与 hasNextLine，不必通读所有方法。
 

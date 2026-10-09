@@ -13,13 +13,11 @@ export default defineConfig({
     siteTitle: 'dailyStudy',
     nav: [
       { text: '课程', link: '/lessons/java-toolchain', activeMatch: '/lessons/' },
-      { text: '学习路线', link: '/learning-path' },
-      { text: 'macOS 环境', link: '/setup' }
+      { text: '学习路线', link: '/learning-path' }
     ],
     sidebar: [
       { text: '开始阅读', items: [
-        { text: '学习路线', link: '/learning-path' },
-        { text: 'macOS 开发环境', link: '/setup' }
+        { text: '学习路线', link: '/learning-path' }
       ] },
       { text: '基础篇 · 前端走向服务端', items: [
         { text: '01 · Java 工具链与程序执行', link: '/lessons/java-toolchain' },

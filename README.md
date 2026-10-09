@@ -26,12 +26,11 @@ npm run preview
 
 | 课程 | 内容 |
 |---|---|
-| [01 · Java 工具链与程序执行](site/lessons/java-toolchain.md) | 从问候与计算器理解编译、运行、JDK/JVM 和 Maven |
-| [02 · HTTP 请求、响应与诊断](site/lessons/http.md) | 从查询、创建笔记理解请求、契约与错误诊断 |
-| [03 · Java 输入、控制流与方法](site/lessons/java-control-flow.md) | 从固定计算到输入、判断、循环、方法和错误重试 |
-| [04 · 请求链路与服务端状态](site/lessons/request-lifecycle.md) | 用一条笔记解释路由、校验、刷新、重启和持久化 |
+| [01 · Java 工具链与程序执行](site/lessons/java-toolchain.md) | 源码结构、编译、JDK/JVM、包与参数、JAR、Maven 配置和构建 |
+| [02 · HTTP 请求、响应与诊断](site/lessons/http.md) | 请求与契约、方法语义、编码与分页、错误、缓存、CORS 和客户端练习 |
+| [03 · Java 输入、控制流与方法](site/lessons/java-control-flow.md) | 类型与运算、字符串、分支、数组、方法、异常、统计程序和调试 |
+| [04 · 请求链路与服务端状态](site/lessons/request-lifecycle.md) | 路由、分层、生命周期、文件保存、并发、幂等与日志分析 |
 | [学习路线](site/learning-path.md) | Java 优先，参考渡一 30 门目录并区分必修与进阶 |
-| [macOS 环境](site/setup.md) | Java/Maven/Git/Node 安装与运行 |
 
 目前有前四课完整内容，后续继续加入同一站点。
 
@@ -81,4 +80,4 @@ cd projects/java-foundations
 mvn -B -ntp test
 ```
 
-Linux 安装脚本保留官方下载校验、平台代理和系统证书信任。Mac 使用网站里的安装说明。
+云环境安装脚本保留官方下载校验、平台代理和系统证书信任。

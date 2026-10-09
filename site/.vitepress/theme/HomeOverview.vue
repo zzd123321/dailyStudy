@@ -3,16 +3,16 @@ import { withBase } from 'vitepress'
 
 const courses = [
   { number: '01', topic: 'JAVA · 工具链', title: '代码如何成为一个程序',
-    description: '先打印一句问候，再改一个计算器。通过实际结果理解编译、运行、JVM 与 Maven。',
+    description: '从问候与计算器理解编译运行，再用包、命令行参数、JAR 与 Maven 完成独立交付。',
     link: '/lessons/java-toolchain', tags: ['JDK', '编译与运行', 'Maven'] },
   { number: '02', topic: 'WEB · 请求链路', title: '看懂一次 HTTP 交换',
-    description: '查询和创建一条学习笔记，观察请求与响应，再用三种错误理解格式、解析与校验。',
+    description: '从笔记接口走到方法语义、参数编码、缓存与跨源，写出检查状态和结构的客户端。',
     link: '/lessons/http', tags: ['接口契约', '状态码', '错误诊断'] },
   { number: '03', topic: 'JAVA · 编程基础', title: '让程序根据输入做决定',
-    description: '从固定数字走到用户输入，逐步学会判断、循环、方法，以及输错后怎样重新读取。',
+    description: '用输入、运算、判断、数组与方法写出统计程序，再练习错误重试和断点调试。',
     link: '/lessons/java-control-flow', tags: ['输入校验', '控制流', '方法'] },
   { number: '04', topic: 'WEB · 服务端思维', title: '把请求与数据状态串起来',
-    description: '跟着一条笔记从创建走到保存，亲手比较刷新、重复提交和服务重启后的数据。',
+    description: '追踪笔记创建、刷新与重启，验证文件保存，再分析分层、并发、幂等和日志。',
     link: '/lessons/request-lifecycle', tags: ['请求链路', '内存与持久化', '故障定位'] }
 ]
 </script>

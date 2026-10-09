@@ -63,10 +63,10 @@ description: 参考渡一 AI 大全栈目录，按 Java 优先的顺序，围绕
 
 现有四课是起步基础，已经按“小例子 → 解释 → 验证”的方式重写：
 
-- [01 · Java 工具链与程序执行](/lessons/java-toolchain)：先打印一句话，再理解编译、JVM 和 Maven。
-- [02 · HTTP 请求、响应与诊断](/lessons/http)：用一次创建条目解释 URL、方法、头、正文和状态。
-- [03 · Java 输入、控制流与方法](/lessons/java-control-flow)：把固定数字改成用户输入，逐步增加分支、循环和方法。
-- [04 · 请求链路与服务端状态](/lessons/request-lifecycle)：追踪一条数据，解释刷新、重试、重启与持久化。
+- [01 · Java 工具链与程序执行](/lessons/java-toolchain)：从源码、编译和 JVM 走到包、命令行参数、JAR 与 Maven 构建。
+- [02 · HTTP 请求、响应与诊断](/lessons/http)：从笔记接口理解契约、方法、编码、分页、缓存与 CORS，完成客户端练习。
+- [03 · Java 输入、控制流与方法](/lessons/java-control-flow)：用运算、字符串、分支、数组和方法完成统计程序，练习异常与调试。
+- [04 · 请求链路与服务端状态](/lessons/request-lifecycle)：追踪数据生命周期，做独立文件保存实验，初步分析分层、并发、幂等与日志。
 
 下一课继续 Java 的类与对象，再接集合、异常与文件读写。DNS、TCP、TLS、Cookie、Session、CORS 和 CSRF 在 Web 接口、登录与联调时展开。
 
