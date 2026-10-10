@@ -34,20 +34,21 @@ description: 以大学 Java MOOC、Java 官方教材和中文开源教程为参�
 | [Java 03：类、对象与封装](/lessons/java-objects) | 字段、构造器、实例方法、引用、static 与状态修改 | 旧 05 |
 | [Java 04：继承、接口与多态](/lessons/java-collaboration) | extends、super、重写、抽象类、implements、组合 | 旧 06 |
 | [Java 05：集合与任务管理](/lessons/java-collections) | List、Set、Map、过滤、删除与集合复制 | 新增 |
+| [Java 06：泛型、包装类型与对象相等](/lessons/java-generics-equality) | 类型检查、装箱与拆箱、equals/hashCode、稳定的任务键 | 新增 |
 | [Web A：HTTP 请求与响应](/lessons/http) | 用 curl 和 Network 观察请求，处理 JSON 与错误 | 旧 02 |
 | [Web B：请求处理与数据保存](/lessons/request-lifecycle) | 服务进程、路由、校验、内存与文件 | 旧 04 |
 
-Java 01–05 按顺序阅读。Web A、B 可以在开始 Spring Boot 前阅读；它们不作为学习 Java 对象的前置条件。
+Java 01–06 按顺序阅读。Web A、B 可以在开始 Spring Boot 前阅读；它们不作为学习 Java 对象的前置条件。
 
 ## 第一阶段：Java 基础
 
-已发布的是前五章，后面的主题会继续加入同一网站。下面包含已有章节与后续顺序，06 起的正文尚未发布。
+已发布的是前六章，后面的主题会继续加入同一网站。下面包含已有章节与后续顺序，07 起的正文尚未发布。
 
 | 顺序 | 主要内容 | 要写出的代码 |
 |---|---|---|
 | 01–04 | 程序、语法、对象、继承与接口 | 能创建任务，修改状态，使用不同格式显示它 |
 | [05](/lessons/java-collections) | List、ArrayList、Set、Map、HashMap、LinkedHashMap；遍历与查找 | 添加、查询、完成、删除多条任务 |
-| 06 | 泛型、包装类型、equals 与 hashCode | 正确使用集合，解释对象相等与重复元素 |
+| [06](/lessons/java-generics-equality) | 泛型、包装类型、equals 与 hashCode | 正确使用集合，解释对象相等与重复元素 |
 | 07 | 异常、调用栈、try/catch、异常传播 | 区分错误输入、业务失败和程序缺陷 |
 | 08 | Path、Files、字符编码、JSON、资源关闭 | 保存任务，退出后重新读取 |
 | 09 | LocalDate、Instant、时区、枚举 | 表达截止日期与任务状态 |

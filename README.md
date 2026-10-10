@@ -31,11 +31,12 @@ npm run preview
 | [Java 03 · 类、对象与封装](site/lessons/java-objects.md) | 字段、构造器、this、状态修改、引用与参数传递、static/final |
 | [Java 04 · 继承、接口与多态](site/lessons/java-collaboration.md) | 继承与 super、重写、抽象类、接口与组合，以及任务清单 |
 | [Java 05 · 集合与任务管理](site/lessons/java-collections.md) | List、Set、Map、过滤、按 ID 管理任务、删除与集合复制 |
+| [Java 06 · 泛型、包装类型与对象相等](site/lessons/java-generics-equality.md) | 泛型、装箱与拆箱、equals/hashCode、工作空间内的稳定任务键 |
 | [Web A · HTTP 请求与响应](site/lessons/http.md) | HTTP 消息、JSON、方法、状态码、Fetch、跨源与缓存 |
 | [Web B · 请求处理与数据保存](site/lessons/request-lifecycle.md) | 服务进程、路由、解析与校验、内存、文件与重启实验 |
 | [教材与学习路线](site/learning-path.md) | 教材比较、Java 连续主线、数据库与 AI 后续章节 |
 
-目前有五篇 Java 基础与两篇 Web 专题。内容参考大学 MOOC、官方文档与中文开源教材重新组织，每篇提供对应阅读链接。页面地址保持可用，现有源码包路径沿用历史编号，新任务管理器使用 collections 包。
+目前有六篇 Java 基础与两篇 Web 专题。内容参考大学 MOOC、官方文档与中文开源教材重新组织，每篇提供对应阅读链接。页面地址保持可用，现有源码包路径沿用历史编号，新任务管理器使用 collections 包，任务键示例使用 types 包。
 
 ```text
 site/                         每课一份 Markdown

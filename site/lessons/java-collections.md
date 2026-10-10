@@ -501,4 +501,4 @@ earlier 的结构不自动加入新任务，所以 size 不变。已有 Task 仍
 - [Java 21：List API](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html)、[Map API](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html)：按需查 remove 的重载、put 返回值和视图方法。
 - [OpenJDK 21：LinkedHashMap 文档与源码](https://github.com/openjdk/jdk21u/blob/master/src/java.base/share/classes/java/util/LinkedHashMap.java)：文件开头的说明用于核对默认插入顺序，暂时不用通读实现。
 
-下一章学习泛型、包装类型、equals 与 hashCode，继续解释集合怎样检查类型、判断重复。完整安排见[学习路线](/learning-path)。
+下一章：[泛型、包装类型与对象相等](/lessons/java-generics-equality)，继续解释集合怎样检查类型、判断重复。完整安排见[学习路线](/learning-path)。
